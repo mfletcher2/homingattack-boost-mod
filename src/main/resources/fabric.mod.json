@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "homing",
+  "version": "${version}",
+  "name": "Homing Attack",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/max/Homing Attack"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/homing/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "lol.nezd5553.homing.HomingAttack"
+    ],
+    "client": [
+      "lol.nezd5553.homing.client.HomingAttackClient"
+    ],
+    "modmenu": [
+      "lol.nezd5553.homing.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "homing.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}",
+    "fabric-key-binding-api-v1": "*",
+    "cloth-config": "*"
+  }
+}
