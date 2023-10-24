@@ -23,7 +23,9 @@
 hs_err_pid*
 replay_pid*
 
-# Gradle stuff
+# Gradle and Idea stuff
 .gradle
 build
 run
+.idea
+gradle
