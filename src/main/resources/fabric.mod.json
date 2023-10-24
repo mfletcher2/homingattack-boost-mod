@@ -3,12 +3,14 @@
   "id": "homing",
   "version": "${version}",
   "name": "Homing Attack",
-  "description": "",
-  "authors": [],
+  "description": "Use Sonic's Homing Attack and Boost",
+  "authors": ["nezd5553"],
   "contact": {
-    "repo": "https://github.com/max/Homing Attack"
+    "homepage": "https://github.com/mfletcher2/homingattack-boost-mod",
+    "issues": "https://github.com/mfletcher2/homingattack-boost-mod/issues",
+    "sources": "https://github.com/mfletcher2/homingattack-boost-mod"
   },
-  "license": "All-Rights-Reserved",
+  "license": "GPL-3.0",
   "icon": "assets/homing/icon.png",
   "environment": "*",
   "entrypoints": {
