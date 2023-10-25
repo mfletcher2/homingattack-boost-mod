@@ -27,6 +27,7 @@ public class PlayerHomingAttackInfo {
         player.setVelocity(velocity);
         player.velocityDirty = true;
         player.velocityModified = true;
+        player.addExhaustion(1f);
 
         sendHomingPacket(true);
     }
@@ -72,7 +73,7 @@ public class PlayerHomingAttackInfo {
         buf.writeBoolean(isHoming);
         ServerPlayNetworking.send(player, HomingConstants.ATTACK_PACKET_ID, buf);
         for (PlayerEntity p : player.getWorld().getPlayers())
-            if (p.canSee(player))
+            if (p.getWorld() == player.getWorld())
                 ServerPlayNetworking.send((ServerPlayerEntity) p, HomingConstants.ATTACK_PACKET_ID, buf);
     }
 
