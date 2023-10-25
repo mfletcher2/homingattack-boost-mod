@@ -38,8 +38,7 @@ public class PlayerHomingAttackInfo {
     }
 
     public boolean tick() {
-        Box b = player.getBoundingBox().stretch(velocity.multiply(0.5));
-        if (b.intersects(target.getBoundingBox())) {
+        if (player.getBoundingBox().stretch(velocity).intersects(target.getBoundingBox())) {
             target.damage(player.getWorld().getDamageSources().playerAttack(player), getDamage());
             player.setVelocity(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
             player.velocityModified = true;
