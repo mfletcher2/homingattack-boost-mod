@@ -28,8 +28,10 @@ import org.lwjgl.glfw.GLFW;
 public class HomingAttackClient implements ClientModInitializer {
     private static void receiveHoming(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if(!buf.isReadable()) return;
+        assert client.world != null;
         PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
         boolean isHoming = buf.readBoolean();
+        if(p == null || client.player == null) return;
         if (client.player.equals(p) && !isHoming)
             ((IMinecraftClientMixin) client).setHomingReady();
 
@@ -40,7 +42,9 @@ public class HomingAttackClient implements ClientModInitializer {
     }
     private static void receiveBoost(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if(!buf.isReadable()) return;
+        assert client.world != null;
         PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
+        if(p == null || client.player == null) return;
         boolean isBoosting = buf.readBoolean();
         ((IAbstractClientPlayerEntityMixin) p).setBoosting(isBoosting);
     }
