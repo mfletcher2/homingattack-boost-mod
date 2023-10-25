@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayerHomingAttackInfo {
@@ -15,25 +16,30 @@ public class PlayerHomingAttackInfo {
 
     @Getter
     private final Entity target;
-    private final Vec3d velocity;
+    private Vec3d velocity;
     private final int startTime;
+
+    private float prevDist;
 
     public PlayerHomingAttackInfo(ServerPlayerEntity player, Entity target) {
         this.player = player;
         this.target = target;
         startTime = player.getServer().getTicks();
 
-        velocity = target.getEyePos().subtract(player.getPos()).normalize().multiply(HomingAttack.config.homingSpeed);
+        velocity = target.getPos().subtract(player.getPos()).normalize().multiply(HomingAttack.config.homingSpeed);
         player.setVelocity(velocity);
         player.velocityDirty = true;
         player.velocityModified = true;
         player.addExhaustion(1f);
 
+        prevDist = player.distanceTo(target);
+
         sendHomingPacket(true);
     }
 
     public boolean tick() {
-        if (player.getBoundingBox().stretch(velocity).intersects(target.getBoundingBox())) {
+        Box b = player.getBoundingBox().stretch(velocity.multiply(0.5));
+        if (b.intersects(target.getBoundingBox())) {
             target.damage(player.getWorld().getDamageSources().playerAttack(player), getDamage());
             player.setVelocity(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
             player.velocityModified = true;
@@ -41,10 +47,16 @@ public class PlayerHomingAttackInfo {
             sendHomingPacket(false);
             return false;
         } else if (player.getServer().getTicks() - startTime >= HomingAttack.config.homingTicksTimeout ||
-                player.getWorld().getBlockCollisions(player, player.getBoundingBox().stretch(velocity)).iterator().hasNext()) {
+                player.getWorld().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext()) {
+            sendHomingPacket(false);
+            return false;
+        } else if (prevDist > (prevDist = player.distanceTo(target))) {
             sendHomingPacket(false);
             return false;
         }
+
+        if (player.getServer().getTicks() % 5 == 0)
+            velocity = target.getPos().subtract(player.getPos()).normalize().multiply(HomingAttack.config.homingSpeed);
         player.setVelocity(velocity);
         player.velocityDirty = true;
         player.velocityModified = true;
@@ -71,9 +83,8 @@ public class PlayerHomingAttackInfo {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(player.getId());
         buf.writeBoolean(isHoming);
-        ServerPlayNetworking.send(player, HomingConstants.ATTACK_PACKET_ID, buf);
         for (PlayerEntity p : player.getWorld().getPlayers())
-            if (p.getWorld() == player.getWorld())
+            if (p.distanceTo(player) < 128)
                 ServerPlayNetworking.send((ServerPlayerEntity) p, HomingConstants.ATTACK_PACKET_ID, buf);
     }
 

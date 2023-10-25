@@ -78,12 +78,13 @@ public class HomingAttackClient implements ClientModInitializer {
             }
             if (boostBinding.isPressed() && !((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
                     && client.player.supportingBlockPos.isPresent() && client.player.getHungerManager().getFoodLevel() > 6
-                    && !client.player.isUsingItem()) {
+                    && !client.player.isUsingItem() && !client.player.horizontalCollision) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(true);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
             } else if (((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
-                    && (!boostBinding.isPressed() || client.player.getHungerManager().getFoodLevel() <= 6 || client.player.isUsingItem())) {
+                    && (!boostBinding.isPressed() || client.player.getHungerManager().getFoodLevel() <= 6
+                    || client.player.isUsingItem() || client.player.horizontalCollision)) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(false);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);

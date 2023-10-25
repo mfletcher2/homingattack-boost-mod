@@ -57,11 +57,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
     public void travel(Vec3d movementInput) {
         if (playerHomingAttackInfo == null) {
             if (isBoosting) {
-                if (this.supportingBlockPos.isPresent()) {
-                    addStatusEffect(speedEffect);
-                    addExhaustion(0.05F);
-                    super.travel(new Vec3d(0, 0, 1));
-                }
+                addStatusEffect(speedEffect);
+                addExhaustion(0.05F);
+                super.travel(new Vec3d(0, 0, 1));
             } else super.travel(movementInput);
         } else super.travel(movementInput);
     }
@@ -102,9 +100,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
         PacketByteBuf bufSend = PacketByteBufs.create();
         bufSend.writeInt(getId());
         bufSend.writeBoolean(isBoosting);
-        ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, HomingConstants.BOOST_PACKET_ID, bufSend);
         for (PlayerEntity p : getWorld().getPlayers())
-            if (p.canSee(this))
+            if (p.distanceTo(this) < 128)
                 ServerPlayNetworking.send((ServerPlayerEntity) p, HomingConstants.BOOST_PACKET_ID, bufSend);
 
     }
