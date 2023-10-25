@@ -65,6 +65,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
 //                    velocityDirty = true;
 //                    velocityModified = true;
                     addStatusEffect(speedEffect);
+                    addExhaustion(0.05F);
                     super.travel(new Vec3d(0, 0, 1));
                 } else {
                     setBoosting(false);
@@ -72,14 +73,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
             } else super.travel(movementInput);
         } else super.travel(movementInput);
     }
-
-    @Unique
-    private boolean isNotOnGround() {
-        Vec3d vec3d = getPos();
-        Block block = getWorld().getBlockState(new BlockPos((int) vec3d.x, (int) vec3d.y - 1, (int) vec3d.z)).getBlock();
-        return block instanceof FluidBlock || block instanceof AirBlock;
-    }
-
     @Inject(method = "updateInput", at = @At("HEAD"), cancellable = true)
     public void onUpdateInput(CallbackInfo ci) {
         if (playerHomingAttackInfo != null)
