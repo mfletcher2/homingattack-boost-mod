@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "Homing Attack",
   "description": "Use Sonic's Homing Attack and Boost",
-  "authors": ["nezd5553"],
+  "authors": [
+    "nezd5553"
+  ],
   "contact": {
     "homepage": "https://github.com/mfletcher2/homingattack-boost-mod",
     "issues": "https://github.com/mfletcher2/homingattack-boost-mod/issues",

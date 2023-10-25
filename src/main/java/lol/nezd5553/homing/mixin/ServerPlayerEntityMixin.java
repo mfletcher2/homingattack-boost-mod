@@ -8,9 +8,6 @@ import lol.nezd5553.homing.mixinaccess.IServerPlayerEntityMixin;
 import lombok.Getter;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -61,18 +58,14 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
         if (playerHomingAttackInfo == null) {
             if (isBoosting) {
                 if (this.supportingBlockPos.isPresent()) {
-//                    setVelocity(getRotationVector().multiply(HomingConstants.BOOST_SPEED, 0, HomingConstants.BOOST_SPEED));
-//                    velocityDirty = true;
-//                    velocityModified = true;
                     addStatusEffect(speedEffect);
                     addExhaustion(0.05F);
                     super.travel(new Vec3d(0, 0, 1));
-                } else {
-                    setBoosting(false);
                 }
             } else super.travel(movementInput);
         } else super.travel(movementInput);
     }
+
     @Inject(method = "updateInput", at = @At("HEAD"), cancellable = true)
     public void onUpdateInput(CallbackInfo ci) {
         if (playerHomingAttackInfo != null)

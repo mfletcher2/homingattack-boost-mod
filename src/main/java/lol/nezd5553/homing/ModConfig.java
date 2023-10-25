@@ -14,7 +14,7 @@ public class ModConfig implements ConfigData {
     int homingTicksTimeout = 40;
 
     @ConfigEntry.Gui.Tooltip
-    public int boostLevel = 100;
+    public int boostLevel = 50;
 
     float baseHomingDamage = 0.5f;
     float ironArmorHomingDamage = 0.5f;

@@ -27,11 +27,11 @@ import org.lwjgl.glfw.GLFW;
 @Environment(EnvType.CLIENT)
 public class HomingAttackClient implements ClientModInitializer {
     private static void receiveHoming(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        if(!buf.isReadable()) return;
+        if (!buf.isReadable()) return;
         assert client.world != null;
         PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
         boolean isHoming = buf.readBoolean();
-        if(p == null || client.player == null) return;
+        if (p == null || client.player == null) return;
         if (client.player.equals(p) && !isHoming)
             ((IMinecraftClientMixin) client).setHomingReady();
 
@@ -40,11 +40,12 @@ public class HomingAttackClient implements ClientModInitializer {
             ((IAbstractClientPlayerEntityMixin) p).stopAnimations();
 
     }
+
     private static void receiveBoost(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        if(!buf.isReadable()) return;
+        if (!buf.isReadable()) return;
         assert client.world != null;
         PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
-        if(p == null || client.player == null) return;
+        if (p == null || client.player == null) return;
         boolean isBoosting = buf.readBoolean();
         ((IAbstractClientPlayerEntityMixin) p).setBoosting(isBoosting);
     }
@@ -75,17 +76,17 @@ public class HomingAttackClient implements ClientModInitializer {
                     ((IMinecraftClientMixin) client).setHomingUnready();
                 }
             }
-            if (boostBinding.isPressed() && !((IAbstractClientPlayerEntityMixin) client.player).isBoosting() && client.player.supportingBlockPos.isPresent()) {
+            if (boostBinding.isPressed() && !((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
+                    && client.player.supportingBlockPos.isPresent() && client.player.getHungerManager().getFoodLevel() > 6
+                    && !client.player.isUsingItem()) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(true);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
-                //((IAbstractClientPlayerEntityMixin)client.player).setBoosting(true);
-            } else if (((IAbstractClientPlayerEntityMixin) client.player).isBoosting() && !boostBinding.isPressed()) {
+            } else if (((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
+                    && (!boostBinding.isPressed() || client.player.getHungerManager().getFoodLevel() <= 6 || client.player.isUsingItem())) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(false);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
-//                ((IAbstractClientPlayerEntityMixin)client.player).setBoosting(false);
-
             }
 
         });
