@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayerHomingAttackInfo {
@@ -49,7 +48,7 @@ public class PlayerHomingAttackInfo {
                 player.getWorld().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext()) {
             sendHomingPacket(false);
             return false;
-        } else if (prevDist > (prevDist = player.distanceTo(target))) {
+        } else if (prevDist < (prevDist = player.distanceTo(target))) {
             sendHomingPacket(false);
             return false;
         }
