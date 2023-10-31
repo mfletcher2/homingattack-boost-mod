@@ -3,11 +3,13 @@ package lol.nezd5553.homing;
 import lol.nezd5553.homing.mixinaccess.IServerPlayerEntityMixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
@@ -44,7 +46,7 @@ public class HomingAttack implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(HomingConstants.ATTACK_PACKET_ID, HomingAttack::receiveHoming);
         ServerPlayNetworking.registerGlobalReceiver(HomingConstants.BOOST_PACKET_ID, HomingAttack::receiveBoost);
 
-        if (!MinecraftClient.getInstance().isInSingleplayer()) {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
             ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeInt(config.homingRange);
