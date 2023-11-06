@@ -1,4 +1,4 @@
-package lol.nezd5553.homing.mixinaccess;
+package lol.nezd5553.homing.client.mixinaccess;
 
 import net.minecraft.entity.Entity;
 

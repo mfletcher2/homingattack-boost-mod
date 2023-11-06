@@ -23,11 +23,12 @@
       "lol.nezd5553.homing.client.HomingAttackClient"
     ],
     "modmenu": [
-      "lol.nezd5553.homing.client.ModMenuIntegration"
+      "lol.nezd5553.homing.client.HomingAttackClient"
     ]
   },
   "mixins": [
-    "homing.mixins.json"
+    "homing.mixins.json",
+    "homing.client.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

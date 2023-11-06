@@ -1,4 +1,4 @@
-package lol.nezd5553.homing.mixin;
+package lol.nezd5553.homing.client.mixin;
 
 import com.mojang.authlib.GameProfile;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
@@ -11,8 +11,8 @@ import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.mixinaccess.IAbstractClientPlayerEntityMixin;
-import lol.nezd5553.homing.mixinaccess.IKeyboardInputMixin;
+import lol.nezd5553.homing.client.mixinaccess.IAbstractClientPlayerEntityMixin;
+import lol.nezd5553.homing.client.mixinaccess.IKeyboardInputMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;

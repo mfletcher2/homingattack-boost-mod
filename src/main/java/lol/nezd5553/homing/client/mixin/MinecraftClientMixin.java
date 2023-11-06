@@ -1,7 +1,7 @@
-package lol.nezd5553.homing.mixin;
+package lol.nezd5553.homing.client.mixin;
 
 import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.mixinaccess.IMinecraftClientMixin;
+import lol.nezd5553.homing.client.mixinaccess.IMinecraftClientMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.network.ClientPlayerEntity;

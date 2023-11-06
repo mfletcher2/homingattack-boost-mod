@@ -2,17 +2,14 @@ package lol.nezd5553.homing.mixin;
 
 import com.mojang.authlib.GameProfile;
 import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.HomingConstants;
 import lol.nezd5553.homing.PlayerHomingAttackInfo;
 import lol.nezd5553.homing.mixinaccess.IServerPlayerEntityMixin;
+import lol.nezd5553.homing.network.HomingServerNetworking;
 import lombok.Getter;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -97,12 +94,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IS
         this.isBoosting = boosting;
         if (!boosting)
             removeStatusEffect(speedEffect.getEffectType());
-        PacketByteBuf bufSend = PacketByteBufs.create();
-        bufSend.writeInt(getId());
-        bufSend.writeBoolean(isBoosting);
-        for (PlayerEntity p : getWorld().getPlayers())
-            if (p.distanceTo(this) < 128)
-                ServerPlayNetworking.send((ServerPlayerEntity) p, HomingConstants.BOOST_PACKET_ID, bufSend);
+        HomingServerNetworking.sendBoostPacket(this, boosting);
 
     }
 }

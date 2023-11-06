@@ -1,6 +1,6 @@
-package lol.nezd5553.homing.mixin;
+package lol.nezd5553.homing.client.mixin;
 
-import lol.nezd5553.homing.mixinaccess.IKeyboardInputMixin;
+import lol.nezd5553.homing.client.mixinaccess.IKeyboardInputMixin;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.GameOptions;
