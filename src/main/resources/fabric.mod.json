@@ -17,13 +17,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "lol.nezd5553.homing.HomingAttack"
+      "me.mfletcher.homing.HomingAttack"
     ],
     "client": [
-      "lol.nezd5553.homing.client.HomingAttackClient"
+      "me.mfletcher.homing.client.HomingAttackClient"
     ],
     "modmenu": [
-      "lol.nezd5553.homing.client.ModMenuIntegration"
+      "me.mfletcher.homing.client.ModMenuIntegration"
     ]
   },
   "mixins": [

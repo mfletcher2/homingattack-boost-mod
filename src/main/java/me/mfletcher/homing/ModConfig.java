@@ -1,4 +1,4 @@
-package lol.nezd5553.homing;
+package me.mfletcher.homing;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

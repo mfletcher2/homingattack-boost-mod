@@ -1,4 +1,4 @@
-package lol.nezd5553.homing.mixin;
+package me.mfletcher.homing.mixin;
 
 import com.mojang.authlib.GameProfile;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
@@ -10,9 +10,9 @@ import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
 import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
-import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.mixinaccess.IAbstractClientPlayerMixin;
-import lol.nezd5553.homing.mixinaccess.IKeyboardInputMixin;
+import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.mixinaccess.IAbstractClientPlayerMixin;
+import me.mfletcher.homing.mixinaccess.IKeyboardInputMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;

@@ -1,8 +1,8 @@
-package lol.nezd5553.homing.client;
+package me.mfletcher.homing.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import lol.nezd5553.homing.ModConfig;
+import me.mfletcher.homing.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

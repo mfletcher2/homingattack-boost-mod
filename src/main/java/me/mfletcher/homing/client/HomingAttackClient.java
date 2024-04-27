@@ -1,13 +1,13 @@
-package lol.nezd5553.homing.client;
+package me.mfletcher.homing.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
-import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.HomingConstants;
-import lol.nezd5553.homing.mixinaccess.IAbstractClientPlayerMixin;
-import lol.nezd5553.homing.mixinaccess.IMinecraftMixin;
+import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.HomingConstants;
+import me.mfletcher.homing.mixinaccess.IAbstractClientPlayerMixin;
+import me.mfletcher.homing.mixinaccess.IMinecraftMixin;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

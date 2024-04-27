@@ -1,10 +1,10 @@
-package lol.nezd5553.homing.mixin;
+package me.mfletcher.homing.mixin;
 
 import com.mojang.authlib.GameProfile;
-import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.HomingConstants;
-import lol.nezd5553.homing.PlayerHomingAttackInfo;
-import lol.nezd5553.homing.mixinaccess.IServerPlayerMixin;
+import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.HomingConstants;
+import me.mfletcher.homing.PlayerHomingAttackInfo;
+import me.mfletcher.homing.mixinaccess.IServerPlayerMixin;
 import lombok.Getter;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

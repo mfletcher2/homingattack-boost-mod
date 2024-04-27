@@ -1,6 +1,6 @@
-package lol.nezd5553.homing.mixin;
+package me.mfletcher.homing.mixin;
 
-import lol.nezd5553.homing.mixinaccess.IServerPlayerMixin;
+import me.mfletcher.homing.mixinaccess.IServerPlayerMixin;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;

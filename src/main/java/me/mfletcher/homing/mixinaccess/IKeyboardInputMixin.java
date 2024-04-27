@@ -1,4 +1,4 @@
-package lol.nezd5553.homing.mixinaccess;
+package me.mfletcher.homing.mixinaccess;
 
 public interface IKeyboardInputMixin {
     void setBoosting(boolean isBoosting);

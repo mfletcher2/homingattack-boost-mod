@@ -1,6 +1,6 @@
-package lol.nezd5553.homing;
+package me.mfletcher.homing;
 
-import lol.nezd5553.homing.mixinaccess.IServerPlayerMixin;
+import me.mfletcher.homing.mixinaccess.IServerPlayerMixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.EnvType;

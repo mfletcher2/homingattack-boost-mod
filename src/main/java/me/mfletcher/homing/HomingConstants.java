@@ -1,4 +1,4 @@
-package lol.nezd5553.homing;
+package me.mfletcher.homing;
 
 
 import net.minecraft.resources.ResourceLocation;

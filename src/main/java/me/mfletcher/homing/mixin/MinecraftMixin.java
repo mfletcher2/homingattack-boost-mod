@@ -1,8 +1,8 @@
-package lol.nezd5553.homing.mixin;
+package me.mfletcher.homing.mixin;
 
 import com.mojang.blaze3d.platform.WindowEventHandler;
-import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.mixinaccess.IMinecraftMixin;
+import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.mixinaccess.IMinecraftMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.thread.ReentrantBlockableEventLoop;
