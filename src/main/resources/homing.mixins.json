@@ -3,11 +3,13 @@
   "package": "lol.nezd5553.homing.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "AbstractClientPlayerMixin",
-    "KeyboardInputMixin",
-    "MinecraftMixin",
     "MobMixin",
     "ServerPlayerMixin"
+  ],
+  "client": [
+    "AbstractClientPlayerMixin",
+    "KeyboardInputMixin",
+    "MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1
