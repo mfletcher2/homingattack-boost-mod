@@ -1,12 +1,13 @@
 package lol.nezd5553.homing.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import lol.nezd5553.homing.HomingAttack;
 import lol.nezd5553.homing.HomingConstants;
-import lol.nezd5553.homing.mixinaccess.IAbstractClientPlayerEntityMixin;
-import lol.nezd5553.homing.mixinaccess.IMinecraftClientMixin;
+import lol.nezd5553.homing.mixinaccess.IAbstractClientPlayerMixin;
+import lol.nezd5553.homing.mixinaccess.IMinecraftMixin;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,77 +16,76 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public class HomingAttackClient implements ClientModInitializer {
-    private static void receiveHoming(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+    private static void receiveHoming(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         if (!buf.isReadable()) return;
-        assert client.world != null;
-        PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
+        assert client.level != null;
+        Player p = (Player) client.level.getEntity(buf.readInt());
         boolean isHoming = buf.readBoolean();
         if (p == null || client.player == null) return;
         if (client.player.equals(p) && !isHoming)
-            ((IMinecraftClientMixin) client).setHomingReady();
+            ((IMinecraftMixin) client).setHomingReady();
 
-        if (isHoming) ((IAbstractClientPlayerEntityMixin) p).startHomingAnimation();
+        if (isHoming) ((IAbstractClientPlayerMixin) p).startHomingAnimation();
         else
-            ((IAbstractClientPlayerEntityMixin) p).stopAnimations();
+            ((IAbstractClientPlayerMixin) p).stopAnimations();
 
     }
 
-    private static void receiveBoost(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+    private static void receiveBoost(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         if (!buf.isReadable()) return;
-        assert client.world != null;
-        PlayerEntity p = (PlayerEntity) client.world.getEntityById(buf.readInt());
+        assert client.level != null;
+        Player p = (Player) client.level.getEntity(buf.readInt());
         if (p == null || client.player == null) return;
         boolean isBoosting = buf.readBoolean();
-        ((IAbstractClientPlayerEntityMixin) p).setBoosting(isBoosting);
+        ((IAbstractClientPlayerMixin) p).setBoosting(isBoosting);
     }
 
     @Override
     public void onInitializeClient() {
-        KeyBinding homingBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        KeyMapping homingBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.homing.attack",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_Z,
                 "category.homing.main"));
 
-        KeyBinding boostBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        KeyMapping boostBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.homing.boost",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_B,
                 "category.homing.main"));
 
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player == null) return;
-            while (homingBinding.wasPressed()) {
-                if (((IMinecraftClientMixin) client).getHighlightedEntity() != null) {
-                    int id = ((IMinecraftClientMixin) client).getHighlightedEntity().getId();
-                    PacketByteBuf buf = PacketByteBufs.create();
+            while (homingBinding.consumeClick()) {
+                if (((IMinecraftMixin) client).getHighlightedEntity() != null) {
+                    int id = ((IMinecraftMixin) client).getHighlightedEntity().getId();
+                    FriendlyByteBuf buf = PacketByteBufs.create();
                     buf.writeInt(id);
                     ClientPlayNetworking.send(HomingConstants.ATTACK_PACKET_ID, buf);
-                    ((IMinecraftClientMixin) client).setHomingUnready();
+                    ((IMinecraftMixin) client).setHomingUnready();
                 }
             }
-            if (boostBinding.isPressed() && !((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
-                    && client.player.supportingBlockPos.isPresent() && client.player.getHungerManager().getFoodLevel() > 6
+            if (boostBinding.isDown() && !((IAbstractClientPlayerMixin) client.player).isBoosting()
+                    && client.player.mainSupportingBlockPos.isPresent() && client.player.getFoodData().getFoodLevel() > 6
                     && !client.player.isUsingItem()) {
-                PacketByteBuf buf = PacketByteBufs.create();
+                FriendlyByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(true);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
-            } else if (((IAbstractClientPlayerEntityMixin) client.player).isBoosting()
-                    && (!boostBinding.isPressed() || client.player.getHungerManager().getFoodLevel() <= 6
+            } else if (((IAbstractClientPlayerMixin) client.player).isBoosting()
+                    && (!boostBinding.isDown() || client.player.getFoodData().getFoodLevel() <= 6
                     || client.player.isUsingItem())) {
-                PacketByteBuf buf = PacketByteBufs.create();
+                FriendlyByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(false);
                 ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
             }
@@ -97,7 +97,7 @@ public class HomingAttackClient implements ClientModInitializer {
             HomingAttack.config.homingRange = buf.readInt();
         });
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new Identifier("homing", "animation"), 42, (player) -> {
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new ResourceLocation("homing", "animation"), 42, (player) -> {
             ModifierLayer<IAnimation> homingAnimation = new ModifierLayer<>();
             return homingAnimation;
         });

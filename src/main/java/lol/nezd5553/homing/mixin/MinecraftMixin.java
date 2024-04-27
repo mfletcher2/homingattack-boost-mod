@@ -1,16 +1,16 @@
 package lol.nezd5553.homing.mixin;
 
+import com.mojang.blaze3d.platform.WindowEventHandler;
 import lol.nezd5553.homing.HomingAttack;
-import lol.nezd5553.homing.mixinaccess.IMinecraftClientMixin;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.WindowEventHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.thread.ReentrantThreadExecutor;
+import lol.nezd5553.homing.mixinaccess.IMinecraftMixin;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.thread.ReentrantBlockableEventLoop;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,14 +20,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runnable>
-        implements WindowEventHandler, IMinecraftClientMixin {
+@Mixin(Minecraft.class)
+public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnable> implements WindowEventHandler, IMinecraftMixin {
     @Shadow
     @Nullable
-    public ClientPlayerEntity player;
+    public LocalPlayer player;
 
-    public MinecraftClientMixin(String string) {
+    public MinecraftMixin(String string) {
         super(string);
     }
 
@@ -37,7 +36,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     }
 
 
-    @Inject(method = "hasOutline", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
     public void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity.equals(getHighlightedEntity())) cir.setReturnValue(true);
     }
@@ -51,8 +50,8 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     @Inject(method = "tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci) {
         if (player == null) return;
-        if (!player.isSpectator() && !player.hasVehicle()) {
-            if (!player.isOnGround()) {
+        if (!player.isSpectator() && !player.isPassenger()) {
+            if (!player.onGround()) {
                 if (homingReady)
                     setHighlightedEntity(getEntityLooking());
                 else
@@ -71,13 +70,13 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
         float homingRange = HomingAttack.config.homingRange;
 
         Entity camera = getCameraEntity();
-        Vec3d vec3d2 = camera.getRotationVec(1.0f);
-        Vec3d vec3d = camera.getCameraPosVec(1.0f);
-        Vec3d vec3d3 = vec3d.add(vec3d2.x * homingRange, vec3d2.y * homingRange, vec3d2.z * homingRange);
-        Box box = camera.getBoundingBox().stretch(vec3d2.multiply(homingRange)).expand(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(camera, vec3d, vec3d3, box,
-                entity -> !entity.isSpectator() && entity.canHit(), homingRange * homingRange);
-        if (entityHitResult != null && entityHitResult.getEntity().isAlive() && player.canSee(entityHitResult.getEntity())) {
+        Vec3 vec32 = camera.getViewVector(1.0f);
+        Vec3 vec3 = camera.getEyePosition(1.0f);
+        Vec3 vec33 = vec3.add(vec32.x * homingRange, vec32.y * homingRange, vec32.z * homingRange);
+        AABB box = camera.getBoundingBox().expandTowards(vec32.scale(homingRange)).inflate(1.0, 1.0, 1.0);
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, vec3, vec33, box,
+                entity -> !entity.isSpectator() && entity.isPickable(), homingRange * homingRange);
+        if (entityHitResult != null && entityHitResult.getEntity().isAlive() && player.hasLineOfSight(entityHitResult.getEntity())) {
             return entityHitResult.getEntity();
         }
         return null;

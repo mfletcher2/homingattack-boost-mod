@@ -1,16 +1,17 @@
 package lol.nezd5553.homing;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class HomingConstants {
-    public static final Identifier ATTACK_PACKET_ID = new Identifier("homing-attack");
-    public static final Identifier BOOST_PACKET_ID = new Identifier("homing-boost");
-    public static final Identifier HOMING_RANGE_ID = new Identifier("homing-range");
+    public static final ResourceLocation ATTACK_PACKET_ID = new ResourceLocation("homing-attack");
+    public static final ResourceLocation BOOST_PACKET_ID = new ResourceLocation("homing-boost");
+    public static final ResourceLocation HOMING_RANGE_ID = new ResourceLocation("homing-range");
 
     public static final Set<Item> IRON_ARMOR = new HashSet<>();
     public static final Set<Item> GOLD_ARMOR = new HashSet<>();

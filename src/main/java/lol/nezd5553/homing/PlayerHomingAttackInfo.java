@@ -4,32 +4,32 @@ package lol.nezd5553.homing;
 import lombok.Getter;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class PlayerHomingAttackInfo {
-    private final ServerPlayerEntity player;
+    private final ServerPlayer player;
 
     @Getter
     private final Entity target;
-    private Vec3d velocity;
+    private Vec3 velocity;
     private final int startTime;
 
     private float prevDist;
 
-    public PlayerHomingAttackInfo(ServerPlayerEntity player, Entity target) {
+    public PlayerHomingAttackInfo(ServerPlayer player, Entity target) {
         this.player = player;
         this.target = target;
-        startTime = player.getServer().getTicks();
+        startTime = player.getServer().getTickCount();
 
-        velocity = target.getPos().subtract(player.getPos()).normalize().multiply(HomingAttack.config.homingSpeed);
-        player.setVelocity(velocity);
-        player.velocityDirty = true;
-        player.velocityModified = true;
-        player.addExhaustion(1f);
+        velocity = target.position().subtract(player.position()).normalize().scale(HomingAttack.config.homingSpeed);
+        player.setDeltaMovement(velocity);
+        player.hasImpulse = true;
+        player.hurtMarked = true;
+        player.causeFoodExhaustion(1f);
 
         prevDist = player.distanceTo(target);
 
@@ -37,15 +37,15 @@ public class PlayerHomingAttackInfo {
     }
 
     public boolean tick() {
-        if (player.getBoundingBox().stretch(velocity).intersects(target.getBoundingBox())) {
-            target.damage(player.getWorld().getDamageSources().playerAttack(player), getDamage());
-            player.setVelocity(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
-            player.velocityModified = true;
-            player.velocityDirty = true;
+        if (player.getBoundingBox().expandTowards(velocity).intersects(target.getBoundingBox())) {
+            target.hurt(player.level().damageSources().playerAttack(player), getDamage());
+            player.setDeltaMovement(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
+            player.hasImpulse = true;
+            player.hurtMarked = true;
             sendHomingPacket(false);
             return false;
-        } else if (player.getServer().getTicks() - startTime >= HomingAttack.config.homingTicksTimeout ||
-                player.getWorld().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext()) {
+        } else if (player.getServer().getTickCount() - startTime >= HomingAttack.config.homingTicksTimeout ||
+                player.level().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext()) {
             sendHomingPacket(false);
             return false;
         } else if (prevDist < (prevDist = player.distanceTo(target))) {
@@ -53,17 +53,17 @@ public class PlayerHomingAttackInfo {
             return false;
         }
 
-        if (player.getServer().getTicks() % 5 == 0)
-            velocity = target.getPos().subtract(player.getPos()).normalize().multiply(HomingAttack.config.homingSpeed);
-        player.setVelocity(velocity);
-        player.velocityDirty = true;
-        player.velocityModified = true;
+        if (player.getServer().getTickCount() % 5 == 0)
+            velocity = target.position().subtract(player.position()).normalize().scale(HomingAttack.config.homingSpeed);
+        player.setDeltaMovement(velocity);
+        player.hasImpulse = true;
+        player.hurtMarked = true;
         return true;
     }
 
     private float getDamage() {
         final float[] damage = {HomingAttack.config.baseHomingDamage};
-        player.getArmorItems().forEach(itemStack -> {
+        player.getArmorSlots().forEach(itemStack -> {
             if (HomingConstants.IRON_ARMOR.contains(itemStack.getItem())) {
                 damage[0] += HomingAttack.config.ironArmorHomingDamage;
             } else if (HomingConstants.GOLD_ARMOR.contains(itemStack.getItem())) {
@@ -78,17 +78,17 @@ public class PlayerHomingAttackInfo {
     }
 
     private void sendHomingPacket(boolean isHoming) {
-        PacketByteBuf buf = PacketByteBufs.create();
+        FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeInt(player.getId());
         buf.writeBoolean(isHoming);
-        for (PlayerEntity p : player.getWorld().getPlayers())
+        for (Player p : player.level().players())
             if (p.distanceTo(player) < 128)
-                ServerPlayNetworking.send((ServerPlayerEntity) p, HomingConstants.ATTACK_PACKET_ID, buf);
+                ServerPlayNetworking.send((ServerPlayer) p, HomingConstants.ATTACK_PACKET_ID, buf);
     }
 
     public String toString() {
         return player.getDisplayName() + " -> " + target.getDisplayName()
-                + " with UUID " + target.getUuidAsString();
+                + " with UUID " + target.getStringUUID();
     }
 
 }

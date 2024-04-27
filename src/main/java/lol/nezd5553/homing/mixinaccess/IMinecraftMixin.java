@@ -1,8 +1,8 @@
 package lol.nezd5553.homing.mixinaccess;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
-public interface IMinecraftClientMixin {
+public interface IMinecraftMixin {
     void setHomingReady();
 
     void setHomingUnready();

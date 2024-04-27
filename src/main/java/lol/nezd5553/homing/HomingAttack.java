@@ -1,6 +1,6 @@
 package lol.nezd5553.homing;
 
-import lol.nezd5553.homing.mixinaccess.IServerPlayerEntityMixin;
+import lol.nezd5553.homing.mixinaccess.IServerPlayerMixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.EnvType;
@@ -10,12 +10,12 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+
+import net.minecraft.world.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,15 +25,15 @@ public class HomingAttack implements ModInitializer {
 
     public static ModConfig config;
 
-    private static void receiveHoming(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+    private static void receiveHoming(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
         int id = buf.readInt();
-        Entity e = player.getWorld().getEntityById(id);
+        Entity e = player.level().getEntity(id);
         assert e != null;
-        ((IServerPlayerEntityMixin) player).doHoming(e);
+        ((IServerPlayerMixin) player).doHoming(e);
     }
 
-    private static void receiveBoost(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        ((IServerPlayerEntityMixin) player).setBoosting(buf.readBoolean());
+    private static void receiveBoost(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
+        ((IServerPlayerMixin) player).setBoosting(buf.readBoolean());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class HomingAttack implements ModInitializer {
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
             ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-                PacketByteBuf buf = PacketByteBufs.create();
+                FriendlyByteBuf buf = PacketByteBufs.create();
                 buf.writeInt(config.homingRange);
                 ServerPlayNetworking.send(handler.getPlayer(), HomingConstants.HOMING_RANGE_ID, buf);
             });
