@@ -1,9 +1,12 @@
 package me.mfletcher.homing;
 
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,4 +42,16 @@ public class HomingConstants {
         NETHERITE_ARMOR.add(Items.NETHERITE_LEGGINGS);
         NETHERITE_ARMOR.add(Items.NETHERITE_BOOTS);
     }
+
+    public static final KeyMapping HOMING_KEY = new KeyMapping(
+            "key.homing.attack",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_Z,
+            "category.homing.main");
+
+    public static final KeyMapping BOOST_KEY = new KeyMapping(
+            "key.homing.boost",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_B,
+            "category.homing.main");
 }

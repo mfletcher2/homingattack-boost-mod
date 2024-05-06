@@ -1,105 +1,58 @@
 package me.mfletcher.homing.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
 import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.HomingConstants;
 import me.mfletcher.homing.mixinaccess.IAbstractClientPlayerMixin;
 import me.mfletcher.homing.mixinaccess.IMinecraftMixin;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.KeyMapping;
+import me.mfletcher.homing.networking.HomingMessages;
+import me.mfletcher.homing.networking.packet.AttackC2SPacket;
+import me.mfletcher.homing.networking.packet.BoostC2SPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 
-@Environment(EnvType.CLIENT)
-public class HomingAttackClient implements ClientModInitializer {
-    private static void receiveHoming(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        if (!buf.isReadable()) return;
-        assert client.level != null;
-        Player p = (Player) client.level.getEntity(buf.readInt());
-        boolean isHoming = buf.readBoolean();
-        if (p == null || client.player == null) return;
-        if (client.player.equals(p) && !isHoming)
-            ((IMinecraftMixin) client).setHomingReady();
-
-        if (isHoming) ((IAbstractClientPlayerMixin) p).startHomingAnimation();
-        else
-            ((IAbstractClientPlayerMixin) p).stopAnimations();
-
-    }
-
-    private static void receiveBoost(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        if (!buf.isReadable()) return;
-        assert client.level != null;
-        Player p = (Player) client.level.getEntity(buf.readInt());
-        if (p == null || client.player == null) return;
-        boolean isBoosting = buf.readBoolean();
-        ((IAbstractClientPlayerMixin) p).setBoosting(isBoosting);
-    }
-
-    @Override
-    public void onInitializeClient() {
-        KeyMapping homingBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "key.homing.attack",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_Z,
-                "category.homing.main"));
-
-        KeyMapping boostBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "key.homing.boost",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_B,
-                "category.homing.main"));
-
-
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player == null) return;
-            while (homingBinding.consumeClick()) {
-                if (((IMinecraftMixin) client).getHighlightedEntity() != null) {
-                    int id = ((IMinecraftMixin) client).getHighlightedEntity().getId();
-                    FriendlyByteBuf buf = PacketByteBufs.create();
-                    buf.writeInt(id);
-                    ClientPlayNetworking.send(HomingConstants.ATTACK_PACKET_ID, buf);
-                    ((IMinecraftMixin) client).setHomingUnready();
-                }
+public class HomingAttackClient {
+    @Mod.EventBusSubscriber(modid = HomingAttack.MODID, value = Dist.CLIENT)
+    public static class ClientForgeEvents {
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+            if (HomingConstants.HOMING_KEY.consumeClick()) {
+                Entity entity = ((IMinecraftMixin) Minecraft.getInstance()).getHighlightedEntity();
+                if (entity != null)
+                    HomingMessages.sendToServer(new AttackC2SPacket(((IMinecraftMixin) Minecraft.getInstance()).getHighlightedEntity().getId()));
             }
-            if (boostBinding.isDown() && !((IAbstractClientPlayerMixin) client.player).isBoosting()
-                    && client.player.mainSupportingBlockPos.isPresent() && client.player.getFoodData().getFoodLevel() > 6
-                    && !client.player.isUsingItem()) {
-                FriendlyByteBuf buf = PacketByteBufs.create();
-                buf.writeBoolean(true);
-                ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
-            } else if (((IAbstractClientPlayerMixin) client.player).isBoosting()
-                    && (!boostBinding.isDown() || client.player.getFoodData().getFoodLevel() <= 6
-                    || client.player.isUsingItem())) {
-                FriendlyByteBuf buf = PacketByteBufs.create();
-                buf.writeBoolean(false);
-                ClientPlayNetworking.send(HomingConstants.BOOST_PACKET_ID, buf);
+        }
+
+        @SubscribeEvent
+        public static void onPlayerTick(TickEvent event) {
+            if (event.type != TickEvent.Type.PLAYER || event.side != LogicalSide.CLIENT || Minecraft.getInstance().player == null)
+                return;
+            if (HomingConstants.BOOST_KEY.isDown() && !((IAbstractClientPlayerMixin) Minecraft.getInstance().player).isBoosting()
+                    && Minecraft.getInstance().player.mainSupportingBlockPos.isPresent() && Minecraft.getInstance().player.getFoodData().getFoodLevel() > 6
+                    && !Minecraft.getInstance().player.isUsingItem()) {
+                HomingMessages.sendToServer(new BoostC2SPacket(true));
+                ((IAbstractClientPlayerMixin) Minecraft.getInstance().player).setBoosting(true);
+            } else if (((IAbstractClientPlayerMixin) Minecraft.getInstance().player).isBoosting()
+                    && (!HomingConstants.BOOST_KEY.isDown() || Minecraft.getInstance().player.getFoodData().getFoodLevel() <= 6
+                    || Minecraft.getInstance().player.isUsingItem())) {
+                HomingMessages.sendToServer(new BoostC2SPacket(false));
+                ((IAbstractClientPlayerMixin) Minecraft.getInstance().player).setBoosting(false);
             }
+        }
 
-        });
-        ClientPlayNetworking.registerGlobalReceiver(HomingConstants.ATTACK_PACKET_ID, HomingAttackClient::receiveHoming);
-        ClientPlayNetworking.registerGlobalReceiver(HomingConstants.BOOST_PACKET_ID, HomingAttackClient::receiveBoost);
-        ClientPlayNetworking.registerGlobalReceiver(HomingConstants.HOMING_RANGE_ID, (client, handler, buf, responseSender) -> {
-            HomingAttack.config.homingRange = buf.readInt();
-        });
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new ResourceLocation("homing", "animation"), 42, (player) -> {
-            ModifierLayer<IAnimation> homingAnimation = new ModifierLayer<>();
-            return homingAnimation;
-        });
+        @Mod.EventBusSubscriber(modid = HomingAttack.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+        public static class ClientModBusEvents {
+            @SubscribeEvent
+            public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+                event.register(HomingConstants.HOMING_KEY);
+                event.register(HomingConstants.BOOST_KEY);
+            }
+        }
     }
 }

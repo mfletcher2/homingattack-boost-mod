@@ -1,10 +1,8 @@
 package me.mfletcher.homing;
 
 
-import lombok.Getter;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
+import me.mfletcher.homing.networking.HomingMessages;
+import me.mfletcher.homing.networking.packet.AttackS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 public class PlayerHomingAttackInfo {
     private final ServerPlayer player;
 
-    @Getter
     private final Entity target;
     private Vec3 velocity;
     private final int startTime;
@@ -78,12 +75,9 @@ public class PlayerHomingAttackInfo {
     }
 
     private void sendHomingPacket(boolean isHoming) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeInt(player.getId());
-        buf.writeBoolean(isHoming);
         for (Player p : player.level().players())
             if (p.distanceTo(player) < 128)
-                ServerPlayNetworking.send((ServerPlayer) p, HomingConstants.ATTACK_PACKET_ID, buf);
+                HomingMessages.sendToPlayer(new AttackS2CPacket(player.getId(), isHoming), (ServerPlayer) p);
     }
 
     public String toString() {
@@ -91,4 +85,7 @@ public class PlayerHomingAttackInfo {
                 + " with UUID " + target.getStringUUID();
     }
 
+    public Entity getTarget() {
+        return target;
+    }
 }

@@ -2,14 +2,12 @@ package me.mfletcher.homing.mixin;
 
 import com.mojang.authlib.GameProfile;
 import me.mfletcher.homing.HomingAttack;
-import me.mfletcher.homing.HomingConstants;
 import me.mfletcher.homing.PlayerHomingAttackInfo;
 import me.mfletcher.homing.mixinaccess.IServerPlayerMixin;
-import lombok.Getter;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import me.mfletcher.homing.networking.HomingMessages;
+import me.mfletcher.homing.networking.packet.BoostS2CPacket;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -32,9 +30,12 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     @Shadow
     @Final
     private static Logger LOGGER;
+
+    @Shadow
+    public abstract void sendSystemMessage(Component pComponent);
+
     @Unique
     @Nullable
-    @Getter
     private PlayerHomingAttackInfo playerHomingAttackInfo = null;
 
     @Unique
@@ -93,12 +94,15 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
         this.isBoosting = boosting;
         if (!boosting)
             removeEffect(speedEffect.getEffect());
-        FriendlyByteBuf bufSend = PacketByteBufs.create();
-        bufSend.writeInt(getId());
-        bufSend.writeBoolean(isBoosting);
         for (Player p : level().players())
-            if (p.distanceTo(this) < 128)
-                ServerPlayNetworking.send((ServerPlayer) p, HomingConstants.BOOST_PACKET_ID, bufSend);
+            if (p.distanceTo(this) < 128) {
+                HomingMessages.sendToPlayer(new BoostS2CPacket(getId(), isBoosting), (ServerPlayer) p);
+            }
 
+    }
+
+    @Unique
+    public PlayerHomingAttackInfo getPlayerHomingAttackInfo() {
+        return playerHomingAttackInfo;
     }
 }
