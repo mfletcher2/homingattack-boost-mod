@@ -93,11 +93,8 @@ public abstract class AbstractClientPlayerMixin extends Player implements IAbstr
 
     @Unique
     public void setBoosting(boolean boosting) {
-        System.out.println("Setting boosting to " + boosting + " for " + getName().getString());
         if (isBoosting != boosting) {
-            System.out.println("Boosting changed for " + getName().getString());
             if (boosting) {
-                System.out.println("Starting boost animation");
                 startBoostAnimation();
             } else {
                 stopAnimations();
@@ -106,8 +103,6 @@ public abstract class AbstractClientPlayerMixin extends Player implements IAbstr
 
 
         isBoosting = boosting;
-        System.out.println("Set boosting to " + isBoosting + " for " + getName().getString());
-
 
         if (this.equals(Minecraft.getInstance().player)) {
             ((IKeyboardInputMixin) Minecraft.getInstance().player.input).setBoosting(isBoosting);

@@ -26,7 +26,6 @@ public class AttackC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // Running on server
-            System.out.println("Received homing packet");
             Level level = context.getSender().level();
             ((IServerPlayerMixin) context.getSender()).doHoming(level.getEntity(this.targetId));
         });

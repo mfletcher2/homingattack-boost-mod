@@ -32,9 +32,7 @@ public class BoostS2CPacket {
         context.enqueueWork(() -> {
             // Running on client
             Player boostPlayer = (Player) Minecraft.getInstance().level.getEntity(this.boostPlayerId);
-            System.out.println("player is " + boostPlayer);
             if (boostPlayer == null || Minecraft.getInstance().player == null) return;
-            System.out.println("player is not null");
             ((IAbstractClientPlayerMixin) boostPlayer).setBoosting(isBoosting);
         });
         context.setPacketHandled(true);
