@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
+loaderVersion = "[2,)"
 issueTrackerURL = "https://github.com/mfletcher2/homingattack-boost-mod/issues"
 license = "GPL-3.0"
 
@@ -15,32 +15,32 @@ logoFile = "assets/homing/icon.png"
 displayURL = "https://github.com/mfletcher2/homingattack-boost-mod"
 
 [[dependencies.homing]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[20.5,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.homing]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,)"
+versionRange = "[1.20.6,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.homing]]
 modId = "architectury"
 mandatory = true
-versionRange = "[9.2.14,)"
+versionRange = "[12.0.26,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.homing]]
 modId = "cloth_config"
 mandatory = true
-versionRange = "[11.1.118,)"
+versionRange = "[14.0.126,)"
 
 [[dependencies.homing]]
 modId = "playeranimator"
 mandatory = true
-versionRange = "[1.0.2-rc1+1.20,)"
+versionRange = "[1.0.2-rc1+1.20.4,)"

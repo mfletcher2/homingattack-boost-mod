@@ -1,7 +1,6 @@
-package me.mfletcher.homing.forge;
+package me.mfletcher.homing.neoforge;
 
 import be.florens.expandability.api.forge.LivingFluidCollisionEvent;
-import dev.architectury.platform.forge.EventBuses;
 import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.PlayerHomingData;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,21 +9,18 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 @Mod(HomingAttack.MOD_ID)
-public final class HomingAttackForge {
-    public HomingAttackForge() {
-        // Submit our event bus to let Architectury API register our content on the right time.
-        EventBuses.registerModEventBus(HomingAttack.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-
+public final class HomingAttackNeoForge {
+    public HomingAttackNeoForge() {
         // Run our common setup.
         HomingAttack.init();
 
-        MinecraftForge.EVENT_BUS.addListener(HomingAttackForge::onFluidCollision);
+        NeoForge.EVENT_BUS.addListener(HomingAttackNeoForge::onFluidCollision);
     }
 
     private static void onFluidCollision(LivingFluidCollisionEvent event) {
