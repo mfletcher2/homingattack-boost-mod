@@ -15,6 +15,7 @@ import me.mfletcher.homing.network.protocol.ConfigSyncS2CPacket;
 import me.mfletcher.homing.sounds.HomingSounds;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 public final class HomingAttack {
     public static final String MOD_ID = "homing";
@@ -31,16 +32,20 @@ public final class HomingAttack {
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
         config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
-        ClientLifecycleEvent.CLIENT_SETUP.register(client -> {
-            KeyMappings.register();
-            HomingAnimation.register();
-        });
+        if(MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.CLIENT) {
+            ClientLifecycleEvent.CLIENT_SETUP.register(client -> {
+                KeyMappings.register();
+                HomingAnimation.register();
+            });
 
-        PlayerEvent.PLAYER_JOIN.register(localPlayer -> HomingMessages.sendToPlayer(new ConfigSyncS2CPacket(config), localPlayer));
+            ClientTickEvent.CLIENT_LEVEL_POST.register(minecraft -> {
+                HomingAbility.handleHoming();
+                BoostAbility.handleBoost();
+            });
+        }
 
-        ClientTickEvent.CLIENT_LEVEL_POST.register(minecraft -> {
-            HomingAbility.handleHoming();
-            BoostAbility.handleBoost();
-        });
+        if(MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.SERVER) {
+            PlayerEvent.PLAYER_JOIN.register(player -> HomingMessages.sendToPlayer(new ConfigSyncS2CPacket(config), player));
+        }
     }
 }
