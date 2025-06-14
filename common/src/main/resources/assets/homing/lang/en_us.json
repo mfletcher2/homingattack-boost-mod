@@ -9,6 +9,8 @@
   "text.autoconfig.homing.option.baseHomingDamage": "Base homing damage",
   "text.autoconfig.homing.option.defenseHomingDamageMultiplier": "Armor defense homing damage multiplier",
   "text.autoconfig.homing.option.toughnessHomingDamageMultiplier": "Armor defense homing damage multiplier",
+  "text.autoconfig.homing.option.boostHungerDrain": "Boost Hunger Drain",
+  "text.autoconfig.homing.option.boostXpDrain": "Boost XP Drain",
   "text.autoconfig.homing.option.boostLevel.@Tooltip": "(Speed effect level)",
   "text.autoconfig.homing.option.reticleVolume": "Reticle beep volume",
 

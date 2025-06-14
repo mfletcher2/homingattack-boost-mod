@@ -37,6 +37,9 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     @Shadow
     public abstract void sendSystemMessage(Component pComponent);
 
+    @Shadow
+    public abstract void giveExperiencePoints(int xpPoints);
+
     @Unique
     @Nullable
     private PlayerHomingAttackInfo homing$playerHomingAttackInfo = null;
@@ -55,7 +58,10 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
         if (homing$playerHomingAttackInfo == null) {
             if (PlayerHomingData.isBoosting(this)) {
                 addEffect(homing$speedEffect);
-                causeFoodExhaustion(0.05F);
+                if (HomingAttack.config.boostHungerDrain > 0)
+                    causeFoodExhaustion(HomingAttack.config.boostHungerDrain);
+                if (HomingAttack.config.boostXpDrain > 0)
+                    giveExperiencePoints(-HomingAttack.config.boostXpDrain);
                 super.travel(new Vec3(0, 0, 1));
             } else super.travel(movementInput);
         } else super.travel(movementInput);

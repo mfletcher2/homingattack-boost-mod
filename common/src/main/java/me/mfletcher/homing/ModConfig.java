@@ -21,7 +21,15 @@ public class ModConfig implements ConfigData {
     float defenseHomingDamageMultiplier = 0.3f;
     float toughnessHomingDamageMultiplier = 2.5f;
 
+    public float boostHungerDrain = 0.05F;
+    public int boostXpDrain = 0;
+
     @ConfigEntry.Gui.PrefixText
     @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
     public int reticleVolume = 100;
+
+    @Override
+    public void validatePostLoad() throws ValidationException {
+        // TODO
+    }
 }

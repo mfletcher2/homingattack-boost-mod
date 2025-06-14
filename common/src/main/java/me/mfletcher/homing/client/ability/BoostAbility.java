@@ -1,5 +1,6 @@
 package me.mfletcher.homing.client.ability;
 
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.client.KeyMappings;
 import me.mfletcher.homing.PlayerHomingData;
 import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
@@ -24,14 +25,17 @@ public class BoostAbility {
 
     private static boolean shouldStartBoost(@NotNull LocalPlayer player) {
         return KeyMappings.BOOST_KEY.isDown() && !PlayerHomingData.isBoosting(player)
-                && player.mainSupportingBlockPos.isPresent() && player.getFoodData().getFoodLevel() > 6
+                && player.mainSupportingBlockPos.isPresent()
+                && (HomingAttack.config.boostHungerDrain <= 0 || player.getFoodData().getFoodLevel() > 6)
+                && (HomingAttack.config.boostXpDrain <= 0 || player.totalExperience > 0)
                 && !player.isUsingItem();
     }
 
     private static boolean shouldStopBoost(@NotNull LocalPlayer player) {
         return PlayerHomingData.isBoosting(player)
-                && (!KeyMappings.BOOST_KEY.isDown() || player.getFoodData().getFoodLevel() <= 6
+                && (!KeyMappings.BOOST_KEY.isDown()
+                || (HomingAttack.config.boostHungerDrain > 0 && player.getFoodData().getFoodLevel() <= 6)
+                || (HomingAttack.config.boostXpDrain > 0 && player.totalExperience <= 0)
                 || player.isUsingItem());
     }
-
 }
