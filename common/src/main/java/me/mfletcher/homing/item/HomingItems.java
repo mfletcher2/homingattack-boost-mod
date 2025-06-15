@@ -15,9 +15,9 @@ public class HomingItems {
     public static final Supplier<RegistrarManager> MANAGER = Suppliers.memoize(() -> RegistrarManager.get(HomingAttack.MOD_ID));
     public static final Registrar<Item> ITEMS = MANAGER.get().get(Registries.ITEM);
 
-    @SuppressWarnings("UnstableApiUsage")
-    public static final RegistrySupplier<Item> CHAOS_EMERALDS = ITEMS.register(new ResourceLocation(HomingAttack.MOD_ID, "chaos_emeralds"),
-            () -> new Item(new Item.Properties().arch$tab(HomingCreativeTabs.MY_TAB)));
+//    @SuppressWarnings("UnstableApiUsage")
+//    public static final RegistrySupplier<Item> CHAOS_EMERALDS = ITEMS.register(new ResourceLocation(HomingAttack.MOD_ID, "chaos_emeralds"),
+//            () -> new Item(new Item.Properties().arch$tab(HomingCreativeTabs.MY_TAB)));
 
     public static void register() {}
 }

@@ -4,6 +4,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.block.HomingBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,7 +18,7 @@ public class HomingCreativeTabs {
             "main",
             () -> CreativeTabRegistry.create(
                     Component.translatable("category.homing.main"),
-                    () -> new ItemStack(HomingItems.CHAOS_EMERALDS.get())
+                    () -> new ItemStack(HomingBlocks.DASH_RING.get())
             )
     );
 
