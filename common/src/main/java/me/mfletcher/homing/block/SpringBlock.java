@@ -1,5 +1,6 @@
 package me.mfletcher.homing.block;
 
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.sounds.HomingSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,11 +41,11 @@ public class SpringBlock extends Block implements SimpleWaterloggedBlock {
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         super.entityInside(state, level, pos, entity);
 
-        entity.setDeltaMovement(0, 3, 0);
+        entity.setDeltaMovement(0, HomingAttack.config.springPower, 0);
         entity.hasImpulse = true;
         entity.hurtMarked = true;
 
-        level.playSound(null, pos, HomingSounds.SPRING.get(), SoundSource.BLOCKS, 0.8f, 1f);
+        level.playSound(null, pos, HomingSounds.SPRING.get(), SoundSource.BLOCKS, HomingAttack.config.springVolume / 100f, 1f);
     }
 
     @Override

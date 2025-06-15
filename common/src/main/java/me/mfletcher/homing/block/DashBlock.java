@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -35,14 +34,12 @@ public abstract class DashBlock extends Block implements SimpleWaterloggedBlock 
     public @NotNull
     abstract VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
 
-    @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInsideDash(BlockState state, Entity entity, float dashPower) {
         float rotation = state.getValue(FACING).getOpposite().toYRot();
         entity.setYRot(rotation);
 
         rotation = (float) Math.toRadians(rotation + 90);
-        int dashSpeed = 10;
-        entity.setDeltaMovement(Math.cos(rotation) * dashSpeed, 0, Math.sin(rotation) * dashSpeed);
+        entity.setDeltaMovement(Math.cos(rotation) * dashPower, 0, Math.sin(rotation) * dashPower);
         entity.hasImpulse = true;
         entity.hurtMarked = true;
     }

@@ -1,5 +1,6 @@
 package me.mfletcher.homing.block;
 
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.sounds.HomingSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,8 +27,8 @@ public class DashPanelBlock extends DashBlock {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        super.entityInside(state, level, pos, entity);
-        level.playSound(null, pos, HomingSounds.DASH_PANEL.get(), SoundSource.BLOCKS, 0.8f, 1);
+        entityInsideDash(state, entity, HomingAttack.config.dashPanelPower);
+        level.playSound(null, pos, HomingSounds.DASH_PANEL.get(), SoundSource.BLOCKS, HomingAttack.config.dashPanelVolume / 100f, 1);
     }
 
     @Override

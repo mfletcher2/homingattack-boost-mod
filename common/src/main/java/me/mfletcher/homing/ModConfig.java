@@ -28,9 +28,22 @@ public class ModConfig implements ConfigData {
     public float boostHungerDrain = 0.05F;
     public int boostXpDrain = 0;
 
+    public float dashPanelPower = 10.0f;
+    public float dashRingPower = 10.0f;
+    public float springPower = 3.0f;
+
     @ConfigEntry.Gui.PrefixText
     @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
     public int reticleVolume = 100;
+
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+    public int dashPanelVolume = 80;
+
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+    public int dashRingVolume = 80;
+
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+    public int springVolume = 80;
 
     @Override
     public void validatePostLoad() {
@@ -43,6 +56,12 @@ public class ModConfig implements ConfigData {
         toughnessHomingDamageMultiplier = Math.max(toughnessHomingDamageMultiplier, 0);
         boostHungerDrain = Math.max(boostHungerDrain, 0);
         boostXpDrain = Math.max(boostXpDrain, 0);
+        dashPanelPower = Math.max(dashPanelPower, 0);
+        dashRingPower = Math.max(dashRingPower, 0);
+        springPower = Math.max(springPower, 0);
         reticleVolume = Mth.clamp(reticleVolume, 0, 100);
+        dashPanelVolume = Mth.clamp(dashPanelVolume, 0, 100);
+        dashRingVolume = Mth.clamp(dashRingVolume, 0, 100);
+        springVolume = Mth.clamp(springVolume, 0, 100);
     }
 }

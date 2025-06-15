@@ -1,5 +1,6 @@
 package me.mfletcher.homing.block;
 
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.network.HomingMessages;
 import me.mfletcher.homing.network.protocol.DashRingAnimS2CPacket;
 import me.mfletcher.homing.sounds.HomingSounds;
@@ -35,10 +36,11 @@ public class DashRingBlock extends DashBlock {
         return Z_AXIS_AABB;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        super.entityInside(state, level, pos, entity);
-        level.playSound(null, pos, HomingSounds.DASH_RING.get(), SoundSource.BLOCKS, 0.8f, 1);
+        entityInsideDash(state, entity, HomingAttack.config.dashRingPower);
+        level.playSound(null, pos, HomingSounds.DASH_RING.get(), SoundSource.BLOCKS, HomingAttack.config.dashRingVolume / 100f, 1);
 
         if (entity instanceof ServerPlayer player && level instanceof ServerLevel serverLevel) {
             for (ServerPlayer p : serverLevel.players()) {
