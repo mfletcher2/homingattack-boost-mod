@@ -3,6 +3,7 @@ package me.mfletcher.homing;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import net.minecraft.util.Mth;
 
 @Config(name = "homing")
 public class ModConfig implements ConfigData {
@@ -32,7 +33,16 @@ public class ModConfig implements ConfigData {
     public int reticleVolume = 100;
 
     @Override
-    public void validatePostLoad() throws ValidationException {
-        // TODO
+    public void validatePostLoad() {
+        homingRange = Math.max(homingRange, 1);
+        homingSpeed = Math.max(homingSpeed, 1);
+        homingTicksTimeout = Math.max(homingTicksTimeout, 1);
+        boostLevel = Mth.clamp(boostLevel, 0, 255);
+        baseHomingDamage = Math.max(baseHomingDamage, 0);
+        defenseHomingDamageMultiplier = Math.max(defenseHomingDamageMultiplier, 0);
+        toughnessHomingDamageMultiplier = Math.max(toughnessHomingDamageMultiplier, 0);
+        boostHungerDrain = Math.max(boostHungerDrain, 0);
+        boostXpDrain = Math.max(boostXpDrain, 0);
+        reticleVolume = Mth.clamp(reticleVolume, 0, 100);
     }
 }
