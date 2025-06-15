@@ -3,6 +3,8 @@
   "key.homing.boost": "Boost",
   "category.homing.main": "Homing Attack",
   "text.autoconfig.homing.title": "Homing Attack and Boost",
+  "text.autoconfig.homing.option.enableHoming": "Enable Homing Attack",
+  "text.autoconfig.homing.option.enableBoost": "Enable Boost",
   "text.autoconfig.homing.option.homingRange": "Homing attack range",
   "text.autoconfig.homing.option.homingSpeed": "Homing attack speed",
   "text.autoconfig.homing.option.boostLevel": "Boost level",
@@ -14,7 +16,7 @@
   "text.autoconfig.homing.option.boostLevel.@Tooltip": "(Speed effect level)",
   "text.autoconfig.homing.option.reticleVolume": "Reticle beep volume",
 
-  "text.autoconfig.homing.option.homingRange.@PrefixText": "These options only take effect on the server",
+  "text.autoconfig.homing.option.enableHoming.@PrefixText": "These options only take effect on the server",
   "text.autoconfig.homing.option.reticleVolume.@PrefixText": "These options only take effect on the client",
 
   "item.homing.chaos_emeralds": "Chaos Emeralds",

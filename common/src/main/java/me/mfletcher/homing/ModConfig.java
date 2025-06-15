@@ -7,6 +7,9 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config(name = "homing")
 public class ModConfig implements ConfigData {
     @ConfigEntry.Gui.PrefixText
+    public boolean enableHoming = true;
+    public boolean enableBoost = true;
+
     public int homingRange = 20;
 
     int homingSpeed = 3;

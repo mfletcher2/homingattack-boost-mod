@@ -58,7 +58,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci) {
-        if (player == null) return;
+        if (player == null || !HomingAttack.config.enableHoming) return;
         if (!player.isSpectator() && !player.isPassenger()) {
             if (!player.onGround()) {
                 if (homing$homingReady) {
