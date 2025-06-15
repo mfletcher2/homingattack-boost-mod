@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface AccessorRenderType {
     @Invoker("create")
     static RenderType.CompositeRenderType create(String name, VertexFormat format, VertexFormat.Mode mode, int bufSize, boolean affectsCrumbling, boolean sortOnUpload, RenderType.CompositeState glState) {
-		throw new IllegalStateException("");
-	}
+        throw new IllegalStateException("");
+    }
 }

@@ -3,10 +3,8 @@ package me.mfletcher.homing.item;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrarManager;
-import dev.architectury.registry.registries.RegistrySupplier;
 import me.mfletcher.homing.HomingAttack;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;

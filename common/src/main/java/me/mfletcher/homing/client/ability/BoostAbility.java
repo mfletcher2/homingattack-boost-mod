@@ -1,8 +1,8 @@
 package me.mfletcher.homing.client.ability;
 
 import me.mfletcher.homing.HomingAttack;
-import me.mfletcher.homing.client.KeyMappings;
 import me.mfletcher.homing.PlayerHomingData;
+import me.mfletcher.homing.client.KeyMappings;
 import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
 import me.mfletcher.homing.network.HomingMessages;
 import me.mfletcher.homing.network.protocol.BoostC2SPacket;

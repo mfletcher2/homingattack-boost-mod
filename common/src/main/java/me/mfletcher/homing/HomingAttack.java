@@ -32,7 +32,7 @@ public final class HomingAttack {
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
         config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
-        if(MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.CLIENT) {
+        if (MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.CLIENT) {
             ClientLifecycleEvent.CLIENT_SETUP.register(client -> {
                 KeyMappings.register();
                 HomingAnimation.register();
@@ -44,7 +44,7 @@ public final class HomingAttack {
             });
         }
 
-        if(MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.SERVER) {
+        if (MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.SERVER) {
             PlayerEvent.PLAYER_JOIN.register(player -> HomingMessages.sendToPlayer(new ConfigSyncS2CPacket(config), player));
         }
     }

@@ -64,7 +64,7 @@ public class PlayerHomingAttackInfo {
     private float getDamage() {
         final float[] damage = {HomingAttack.config.baseHomingDamage};
         player.getArmorSlots().forEach(itemStack -> {
-            if(itemStack.getItem() instanceof ArmorItem armorItem)
+            if (itemStack.getItem() instanceof ArmorItem armorItem)
                 damage[0] += armorItem.getDefense() * HomingAttack.config.defenseHomingDamageMultiplier + armorItem.getToughness() * HomingAttack.config.toughnessHomingDamageMultiplier;
         });
         return damage[0];

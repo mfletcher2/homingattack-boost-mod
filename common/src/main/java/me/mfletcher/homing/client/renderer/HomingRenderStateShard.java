@@ -21,7 +21,7 @@ public class HomingRenderStateShard extends RenderStateShard {
     public static final ResourceLocation RETICLE_3_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_3.png");
     public static final ResourceLocation RETICLE_4_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_4.png");
     public static final ResourceLocation RETICLE_5_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_5.png");
-    public static final RenderType[] RETICLE_TYPES = new RenderType[] {
+    public static final RenderType[] RETICLE_TYPES = new RenderType[]{
             getType(RETICLE_0_TEXTURE),
             getType(RETICLE_1_TEXTURE),
             getType(RETICLE_2_TEXTURE),
@@ -32,11 +32,11 @@ public class HomingRenderStateShard extends RenderStateShard {
 
     private static RenderType getType(ResourceLocation texture) {
         RenderType.CompositeState renderTypeState = RenderType.CompositeState.builder()
-				.setShaderState(POSITION_COLOR_TEX_LIGHTMAP_SHADER)
-				.setTextureState(new TextureStateShard(texture, false, false))
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setLightmapState(LIGHTMAP)
-				.createCompositeState(false);
-		return AccessorRenderType.create("homing_reticle", POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, true, true, renderTypeState);
+                .setShaderState(POSITION_COLOR_TEX_LIGHTMAP_SHADER)
+                .setTextureState(new TextureStateShard(texture, false, false))
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                .setLightmapState(LIGHTMAP)
+                .createCompositeState(false);
+        return AccessorRenderType.create("homing_reticle", POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, true, true, renderTypeState);
     }
 }
