@@ -64,7 +64,7 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
                     giveExperiencePoints(-HomingAttack.config.boostXpDrain);
                 super.travel(new Vec3(0, 0, 1));
             } else super.travel(movementInput);
-        } else super.travel(movementInput);
+        }
     }
 
     @Inject(method = "setPlayerInput", at = @At("HEAD"), cancellable = true)
