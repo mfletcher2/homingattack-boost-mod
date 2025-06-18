@@ -16,6 +16,7 @@ public class HomingConfig extends Config {
 
     public boolean enableHoming = true;
     public boolean enableBoost = true;
+    public boolean stopHomingOnCollision = false;
 
     @ValidatedInt.Restrict(min = 1, max = 50)
     public int homingRange = 20;

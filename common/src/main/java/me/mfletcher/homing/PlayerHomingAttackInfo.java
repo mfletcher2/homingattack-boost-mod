@@ -45,7 +45,7 @@ public class PlayerHomingAttackInfo {
             sendHomingPacket(false);
             return false;
         } else if (Objects.requireNonNull(player.getServer()).getTickCount() - startTime >= HomingAttack.config.homingTicksTimeout ||
-                player.level().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext()) {
+                (HomingAttack.config.stopHomingOnCollision && player.level().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext())) {
             sendHomingPacket(false);
             return false;
         } else if (prevDist < (prevDist = player.distanceTo(target))) {
