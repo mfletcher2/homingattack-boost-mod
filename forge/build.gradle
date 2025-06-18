@@ -30,6 +30,12 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        url = "https://thedarkcolour.github.io/KotlinForForge/"
+    }
+}
+
 dependencies {
     forge "net.minecraftforge:forge:$rootProject.forge_version"
 
@@ -39,11 +45,11 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
-    modApi("me.shedaniel.cloth:cloth-config-forge:$rootProject.cloth_config_version")
     include modImplementation("dev.kosmx.player-anim:player-animation-lib-forge:${rootProject.player_animator_version}")
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
     implementation(include("io.github.llamalad7:mixinextras-forge:${rootProject.mixin_extras_version}"))
     include modImplementation("be.florens:expandability-forge:${rootProject.expandability_version}")
+    modImplementation "me.fzzyhmstrs:fzzy_config:${rootProject.fzzy_version}+forge"
 }
 
 processResources {

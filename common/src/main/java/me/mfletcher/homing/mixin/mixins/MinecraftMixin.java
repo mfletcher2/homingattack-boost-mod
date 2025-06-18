@@ -63,8 +63,8 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
             if (!player.onGround()) {
                 if (homing$homingReady) {
                     Entity entityLooking = homing$getEntityLooking();
-                    if (entityLooking != null && !entityLooking.equals(homing$getHighlightedEntity()) && HomingAttack.config.reticleVolume > 0) {
-                        getSoundManager().play(new SimpleSoundInstance(HomingSounds.RETICLE.get(), SoundSource.PLAYERS, HomingAttack.config.reticleVolume / 100f, 1, SoundInstance.createUnseededRandom(), player.blockPosition()));
+                    if (entityLooking != null && !entityLooking.equals(homing$getHighlightedEntity()) && HomingAttack.configClient.reticleVolume > 0) {
+                        getSoundManager().play(new SimpleSoundInstance(HomingSounds.RETICLE.get(), SoundSource.PLAYERS, HomingAttack.configClient.reticleVolume / 100f, 1, SoundInstance.createUnseededRandom(), player.blockPosition()));
                     }
                     homing$setHighlightedEntity(entityLooking);
                 } else

@@ -50,6 +50,10 @@ subprojects {
                 includeGroupByRegex "com.github.*"
             }
         }
+        maven {
+            name = "FzzyMaven"
+            url = "https://maven.fzzyhmstrs.me/"
+        }
     }
 
     dependencies {
