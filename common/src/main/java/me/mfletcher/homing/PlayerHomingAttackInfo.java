@@ -37,7 +37,7 @@ public class PlayerHomingAttackInfo {
     }
 
     public boolean tick() {
-        if (player.getBoundingBox().inflate(2).intersects(target.getBoundingBox().inflate(2))) {
+        if (player.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd).intersects(target.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd))) {
             target.hurt(player.level().damageSources().playerAttack(player), getDamage());
             player.setDeltaMovement(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
             player.hasImpulse = true;
