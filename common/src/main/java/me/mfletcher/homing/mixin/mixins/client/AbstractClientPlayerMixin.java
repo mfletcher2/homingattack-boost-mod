@@ -4,13 +4,14 @@ import com.mojang.authlib.GameProfile;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.PlayerHomingData;
 import me.mfletcher.homing.client.animation.HomingAnimation;
 import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
@@ -46,7 +47,7 @@ public abstract class AbstractClientPlayerMixin extends Player implements IAbstr
     public void aiStep() {
         super.aiStep();
         if (PlayerHomingData.isHoming(this))
-            clientLevel.addParticle(ParticleTypes.ELECTRIC_SPARK, getX(), getY(), getZ(), 0, 0, 0);
+            clientLevel.addParticle((SimpleParticleType) HomingAttack.configClient.homingParticle.get(), getX(), getY(), getZ(), 0, 0, 0);
     }
 
     @Unique
