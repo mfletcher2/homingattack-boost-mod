@@ -104,9 +104,6 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
         else
             level().playSound(null, blockPosition(), HomingSounds.BOOST.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
         for (Player p : level().players())
-            if (p.distanceTo(this) < 128) {
                 HomingMessages.sendToPlayer(new BoostS2CPacket(getId(), PlayerHomingData.isBoosting(this)), (ServerPlayer) p);
-            }
-
     }
 }
