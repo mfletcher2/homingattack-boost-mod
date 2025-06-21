@@ -1,4 +1,4 @@
-package me.mfletcher.homing.mixin.mixins;
+package me.mfletcher.homing.mixin.mixins.client;
 
 import com.mojang.blaze3d.platform.WindowEventHandler;
 import me.mfletcher.homing.HomingAttack;

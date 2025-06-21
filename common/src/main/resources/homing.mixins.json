@@ -7,10 +7,10 @@
     "client.AbstractClientPlayerMixin",
     "client.AccessorRenderType",
     "client.EntityRenderDispatcherMixin",
-    "client.KeyboardInputMixin"
+    "client.KeyboardInputMixin",
+    "client.MinecraftMixin"
   ],
   "mixins": [
-    "MinecraftMixin",
     "ServerPlayerMixin"
   ],
   "injectors": {
