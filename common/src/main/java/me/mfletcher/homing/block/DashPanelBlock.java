@@ -28,7 +28,7 @@ public class DashPanelBlock extends DashBlock {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         entityInsideDash(state, entity, HomingAttack.config.dashPanelPower);
-        level.playSound(null, pos, HomingSounds.DASH_PANEL.get(), SoundSource.BLOCKS, HomingAttack.configClient.dashPanelVolume / 100f, 1);
+        level.playSound(null, pos, HomingSounds.DASH_PANEL.get(), SoundSource.BLOCKS, HomingAttack.config.dashPanelVolume / 100f, 1);
     }
 
     @Override

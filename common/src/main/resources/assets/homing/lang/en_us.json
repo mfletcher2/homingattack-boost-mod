@@ -21,13 +21,14 @@
   "homing.config.springPower": "Spring power",
   "homing.config.homingVolume": "Homing Attack sound volume",
   "homing.config.boostVolume": "Boost sound volume",
+  "homing.config.dashPanelVolume": "Dash panel volume",
+  "homing.config.dashRingVolume": "Dash ring volume",
+  "homing.config.springVolume": "Spring volume",
   "homing.config.boostLevel.desc": "(Speed effect level)\nREQUIRES RELOG",
 
   "homing.config_client": "Client Configuration",
   "homing.config_client.reticleVolume": "Reticle beep volume",
-  "homing.config_client.dashPanelVolume": "Dash panel volume",
-  "homing.config_client.dashRingVolume": "Dash ring volume",
-  "homing.config_client.springVolume": "Spring volume",
+  "homing.config_client.homingParticle": "Homing Attack trail particles",
 
   "item.homing.chaos_emeralds": "Chaos Emeralds",
   "block.homing.dash_panel": "Dash Panel",

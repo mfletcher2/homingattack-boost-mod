@@ -58,6 +58,12 @@ public class HomingConfig extends Config {
     public int homingVolume = 100;
     @ValidatedInt.Restrict(min = 0, max = 100)
     public int boostVolume = 80;
+    @ValidatedInt.Restrict(min = 0, max = 100)
+    public int dashPanelVolume = 80;
+    @ValidatedInt.Restrict(min = 0, max = 100)
+    public int dashRingVolume = 80;
+    @ValidatedInt.Restrict(min = 0, max = 100)
+    public int springVolume = 80;
 
     @Override
     public @NotNull SaveType saveType() {

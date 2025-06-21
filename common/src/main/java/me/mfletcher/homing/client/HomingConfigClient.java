@@ -18,12 +18,6 @@ public class HomingConfigClient extends Config {
 
     @ValidatedInt.Restrict(min = 0, max = 100)
     public int reticleVolume = 100;
-    @ValidatedInt.Restrict(min = 0, max = 100)
-    public int dashPanelVolume = 80;
-    @ValidatedInt.Restrict(min = 0, max = 100)
-    public int dashRingVolume = 80;
-    @ValidatedInt.Restrict(min = 0, max = 100)
-    public int springVolume = 80;
 
     public ValidatedField<ParticleType<?>> homingParticle = ValidatedRegistryType.of(ParticleTypes.ELECTRIC_SPARK, BuiltInRegistries.PARTICLE_TYPE,
             particleTypeHolder -> particleTypeHolder.value() instanceof SimpleParticleType);

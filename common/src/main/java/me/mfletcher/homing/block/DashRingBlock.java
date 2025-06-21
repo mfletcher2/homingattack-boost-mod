@@ -40,7 +40,7 @@ public class DashRingBlock extends DashBlock {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         entityInsideDash(state, entity, HomingAttack.config.dashRingPower);
-        level.playSound(null, pos, HomingSounds.DASH_RING.get(), SoundSource.BLOCKS, HomingAttack.configClient.dashRingVolume / 100f, 1);
+        level.playSound(null, pos, HomingSounds.DASH_RING.get(), SoundSource.BLOCKS, HomingAttack.config.dashRingVolume / 100f, 1);
 
         if (entity instanceof ServerPlayer player && level instanceof ServerLevel serverLevel) {
             for (ServerPlayer p : serverLevel.players()) {

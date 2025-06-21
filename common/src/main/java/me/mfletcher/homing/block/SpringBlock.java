@@ -45,7 +45,7 @@ public class SpringBlock extends Block implements SimpleWaterloggedBlock {
         entity.hasImpulse = true;
         entity.hurtMarked = true;
 
-        level.playSound(null, pos, HomingSounds.SPRING.get(), SoundSource.BLOCKS, HomingAttack.configClient.springVolume / 100f, 1f);
+        level.playSound(null, pos, HomingSounds.SPRING.get(), SoundSource.BLOCKS, HomingAttack.config.springVolume / 100f, 1f);
     }
 
     @Override
