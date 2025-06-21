@@ -54,6 +54,11 @@ public class HomingConfig extends Config {
     @ValidatedFloat.Restrict(min = 0, max = 30)
     public float springPower = 3.0f;
 
+    @ValidatedInt.Restrict(min = 0, max = 100)
+    public int homingVolume = 100;
+    @ValidatedInt.Restrict(min = 0, max = 100)
+    public int boostVolume = 80;
+
     @Override
     public @NotNull SaveType saveType() {
         return SaveType.SEPARATE;

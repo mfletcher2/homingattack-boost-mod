@@ -19,6 +19,8 @@
   "homing.config.dashPanelPower": "Dash Panel power",
   "homing.config.dashRingPower": "Dash Ring power",
   "homing.config.springPower": "Spring power",
+  "homing.config.homingVolume": "Homing Attack sound volume",
+  "homing.config.boostVolume": "Boost sound volume",
   "homing.config.boostLevel.desc": "(Speed effect level)\nREQUIRES RELOG",
 
   "homing.config_client": "Client Configuration",

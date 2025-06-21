@@ -91,7 +91,7 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     @Unique
     public void homing$doHoming(LivingEntity entity) {
         if (entity.distanceTo(this) <= HomingAttack.config.homingRange && homing$playerHomingAttackInfo == null) {
-            level().playSound(null, blockPosition(), HomingSounds.HOMING.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            level().playSound(null, blockPosition(), HomingSounds.HOMING.get(), SoundSource.PLAYERS, HomingAttack.config.homingVolume / 100f, 1.0F);
             homing$playerHomingAttackInfo = new PlayerHomingAttackInfo((ServerPlayer) (Player) this, entity);
             homing$lastHomingEntity = entity;
         } else
@@ -130,7 +130,7 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
         if (!boosting)
             removeEffect(homing$speedEffect.getEffect());
         else
-            level().playSound(null, blockPosition(), HomingSounds.BOOST.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+            level().playSound(null, blockPosition(), HomingSounds.BOOST.get(), SoundSource.PLAYERS, HomingAttack.config.boostVolume / 100f, 1.0F);
         for (Player p : level().players())
             HomingMessages.sendToPlayer(new BoostS2CPacket(getId(), PlayerHomingData.isBoosting(this)), (ServerPlayer) p);
     }
