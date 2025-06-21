@@ -13,6 +13,7 @@
   "homing.config.defenseHomingDamageMultiplier": "Armor defense Homing Attack damage multiplier",
   "homing.config.toughnessHomingDamageMultiplier": "Armor defense Homing Attack damage multiplier",
   "homing.config.homingHitboxAdd": "Add to homing attack hitboxes",
+  "homing.config.homingDamageWaitTicks": "Homing Attack damage cooldown (ticks)",
   "homing.config.boostHungerDrain": "Boost hunger drain",
   "homing.config.boostXpDrain": "Boost XP drain",
   "homing.config.dashPanelPower": "Dash Panel power",

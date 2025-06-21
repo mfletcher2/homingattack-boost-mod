@@ -3,6 +3,7 @@ package me.mfletcher.homing.network.protocol;
 import dev.architectury.networking.NetworkManager;
 import me.mfletcher.homing.mixin.access.IServerPlayerMixin;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.function.Supplier;
@@ -27,7 +28,8 @@ public class AttackC2SPacket {
         context.queue(() -> {
             // Running on server
             Level level = context.getPlayer().level();
-            ((IServerPlayerMixin) context.getPlayer()).homing$doHoming(level.getEntity(this.targetId));
+            if (level.getEntity(this.targetId) instanceof LivingEntity livingEntity)
+                ((IServerPlayerMixin) context.getPlayer()).homing$doHoming(livingEntity);
         });
     }
 }

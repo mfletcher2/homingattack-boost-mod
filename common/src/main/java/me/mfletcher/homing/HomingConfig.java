@@ -39,6 +39,8 @@ public class HomingConfig extends Config {
 
     @ValidatedFloat.Restrict(min = 0, max = 5)
     float homingHitboxAdd = 1.75f;
+    @ValidatedInt.Restrict(min = 0, max = 40)
+    public int homingDamageWaitTicks = 5;
 
     @ValidatedFloat.Restrict(min = 0, max = 1)
     public float boostHungerDrain = 0.05f;
