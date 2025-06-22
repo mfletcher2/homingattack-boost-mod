@@ -37,14 +37,14 @@ subprojects {
         // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
-        maven { url "https://maven.shedaniel.me/" }
+        maven { url = "https://maven.shedaniel.me/" }
         maven {
-            name "KosmX's maven"
-            url 'https://maven.kosmx.dev/'
+            name = "KosmX's maven"
+            url = 'https://maven.kosmx.dev/'
         }
         maven { url = "https://maven.florens.be/releases" }
         maven {
-            url "https://jitpack.io"
+            url = "https://jitpack.io"
             content {
                 includeGroupByRegex "com.github.*"
             }
