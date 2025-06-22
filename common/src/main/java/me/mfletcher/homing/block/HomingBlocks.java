@@ -32,11 +32,11 @@ public class HomingBlocks {
     public static final Supplier<RegistrarManager> MANAGER = Suppliers.memoize(() -> RegistrarManager.get(HomingAttack.MOD_ID));
     public static final Registrar<Block> BLOCKS = MANAGER.get().get(Registries.BLOCK);
 
-    public static final RegistrySupplier<Block> DASH_PANEL = registerBlock(new ResourceLocation(HomingAttack.MOD_ID, "dash_panel"),
+    public static final RegistrySupplier<Block> DASH_PANEL = registerBlock(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "dash_panel"),
             () -> new DashPanelBlock(BlockBehaviour.Properties.of().strength(1f).sound(SoundType.STONE).noCollission()));
-    public static final RegistrySupplier<Block> DASH_RING = registerBlock(new ResourceLocation(HomingAttack.MOD_ID, "dash_ring"),
+    public static final RegistrySupplier<Block> DASH_RING = registerBlock(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "dash_ring"),
             () -> new DashRingBlock(BlockBehaviour.Properties.of().strength(1f).sound(SoundType.STONE).noCollission()));
-    public static final RegistrySupplier<Block> SPRING = registerBlock(new ResourceLocation(HomingAttack.MOD_ID, "spring"),
+    public static final RegistrySupplier<Block> SPRING = registerBlock(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "spring"),
             () -> new SpringBlock(BlockBehaviour.Properties.of().strength(1f).sound(SoundType.STONE).noCollission()));
 
     public static void register() {}

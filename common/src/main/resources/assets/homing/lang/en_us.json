@@ -1,6 +1,7 @@
 {
   "key.homing.attack": "Homing Attack",
   "key.homing.boost": "Boost",
+  "category.homing.main": "Homing Attack and Boost",
   "homing.config": "Server Configuration",
   "homing.config.enableHoming": "Enable Homing Attack",
   "homing.config.enableBoost": "Enable Boost",

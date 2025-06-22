@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class HomingMessages {
-    public static final NetworkChannel CHANNEL = NetworkChannel.create(new ResourceLocation(HomingAttack.MOD_ID, "networking_channel"));
+    public static final NetworkChannel CHANNEL = NetworkChannel.create(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "networking_channel"));
 
     public static void register() {
         // Register messages here

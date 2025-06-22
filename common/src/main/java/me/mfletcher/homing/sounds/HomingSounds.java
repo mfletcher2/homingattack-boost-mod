@@ -26,13 +26,13 @@ public class HomingSounds {
     public static RegistrySupplier<SoundEvent> SPRING;
 
     public static void register() {
-        BOOST = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "boost"));
-        BOOST_2 = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "boost_2"));
-        HOMING = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "homing"));
-        RETICLE = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "reticle"));
-        DASH_PANEL = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "dash_panel"));
-        DASH_RING = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "dash_ring"));
-        SPRING = registerSound(new ResourceLocation(HomingAttack.MOD_ID, "spring"));
+        BOOST =         registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "boost"));
+        BOOST_2 =       registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "boost_2"));
+        HOMING =        registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "homing"));
+        RETICLE =       registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "reticle"));
+        DASH_PANEL =    registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "dash_panel"));
+        DASH_RING =     registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "dash_ring"));
+        SPRING =        registerSound(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "spring"));
     }
 
     private static RegistrySupplier<SoundEvent> registerSound(ResourceLocation id) {

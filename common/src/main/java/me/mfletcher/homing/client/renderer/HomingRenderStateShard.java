@@ -15,12 +15,12 @@ public class HomingRenderStateShard extends RenderStateShard {
     }
 
     // https://github.com/VazkiiMods/Neat/blob/master/Xplat/src/main/java/vazkii/neat/NeatRenderType.java
-    public static final ResourceLocation RETICLE_0_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_0.png");
-    public static final ResourceLocation RETICLE_1_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_1.png");
-    public static final ResourceLocation RETICLE_2_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_2.png");
-    public static final ResourceLocation RETICLE_3_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_3.png");
-    public static final ResourceLocation RETICLE_4_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_4.png");
-    public static final ResourceLocation RETICLE_5_TEXTURE = new ResourceLocation(HomingAttack.MOD_ID, "textures/ui/reticle_5.png");
+    public static final ResourceLocation RETICLE_0_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_0.png");
+    public static final ResourceLocation RETICLE_1_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_1.png");
+    public static final ResourceLocation RETICLE_2_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_2.png");
+    public static final ResourceLocation RETICLE_3_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_3.png");
+    public static final ResourceLocation RETICLE_4_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_4.png");
+    public static final ResourceLocation RETICLE_5_TEXTURE = ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "textures/ui/reticle_5.png");
     public static final RenderType[] RETICLE_TYPES = new RenderType[]{
             getType(RETICLE_0_TEXTURE),
             getType(RETICLE_1_TEXTURE),

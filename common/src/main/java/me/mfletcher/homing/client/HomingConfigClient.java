@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class HomingConfigClient extends Config {
     public HomingConfigClient() {
-        super(new ResourceLocation(HomingAttack.MOD_ID, "config_client"));
+        super(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "config_client"));
     }
 
     @ValidatedInt.Restrict(min = 0, max = 100)

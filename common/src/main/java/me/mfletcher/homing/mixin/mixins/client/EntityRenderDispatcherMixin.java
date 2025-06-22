@@ -49,10 +49,10 @@ public abstract class EntityRenderDispatcherMixin {
         int i = p.tickCount % 6;
         VertexConsumer builder = buffers.getBuffer(HomingRenderStateShard.RETICLE_TYPES[i]);
 
-        builder.vertex(poseStack.last().pose(), -size, -size, 0.01F).color(0, 255, 0, 255).uv(0.0F, 0.0F).uv2(light).endVertex();
-        builder.vertex(poseStack.last().pose(), -size, size, 0.01F).color(0, 255, 0, 255).uv(0.0F, 1F).uv2(light).endVertex();
-        builder.vertex(poseStack.last().pose(), size, size, 0.01F).color(0, 255, 0, 255).uv(1.0F, 1F).uv2(light).endVertex();
-        builder.vertex(poseStack.last().pose(), size, -size, 0.01F).color(0, 255, 0, 255).uv(1.0F, 0.0F).uv2(light).endVertex();
+        builder.addVertex(poseStack.last().pose(), -size, -size, 0.01F).setColor(0, 255, 0, 255).setUv(0.0F, 0.0F).setLight(light);
+        builder.addVertex(poseStack.last().pose(), -size, size, 0.01F).setColor(0, 255, 0, 255).setUv(0.0F, 1F).setLight(light);
+        builder.addVertex(poseStack.last().pose(), size, size, 0.01F).setColor(0, 255, 0, 255).setUv(1.0F, 1F).setLight(light);
+        builder.addVertex(poseStack.last().pose(), size, -size, 0.01F).setColor(0, 255, 0, 255).setUv(1.0F, 0.0F).setLight(light);
 
         poseStack.popPose();
     }

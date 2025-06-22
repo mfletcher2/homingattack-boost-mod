@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @IgnoreVisibility
 public class HomingConfig extends Config {
     public HomingConfig() {
-        super(new ResourceLocation(HomingAttack.MOD_ID, "config"));
+        super(ResourceLocation.fromNamespaceAndPath(HomingAttack.MOD_ID, "config"));
     }
 
     public boolean enableHoming = true;
