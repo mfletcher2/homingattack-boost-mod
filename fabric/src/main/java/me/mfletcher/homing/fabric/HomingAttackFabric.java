@@ -2,13 +2,8 @@ package me.mfletcher.homing.fabric;
 
 import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
 import me.mfletcher.homing.HomingAttack;
-import me.mfletcher.homing.PlayerHomingData;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.material.FluidState;
 
 public final class HomingAttackFabric implements ModInitializer {
@@ -25,16 +20,6 @@ public final class HomingAttackFabric implements ModInitializer {
     }
 
     private static boolean onFluidCollision(LivingEntity entity, FluidState fluidState) {
-        if (entity instanceof Player player) {
-            if (PlayerHomingData.isBoosting(player) && !player.isUsingItem() && !player.isCrouching() && !player.isInWater() && !player.isSwimming()) {
-                if (fluidState.is(FluidTags.LAVA) && !player.fireImmune() && !EnchantmentHelper.hasFrostWalker(player)) {
-                    player.hurt(player.damageSources().hotFloor(), 1);
-                }
-                player.level().addParticle(ParticleTypes.SPLASH, player.getX(), player.getY(), player.getZ(), 0, 3, 0);
-                return true;
-            }
-            return false;
-        }
-        return false;
+        return HomingAttack.shouldFluidCollision(entity, fluidState);
     }
 }

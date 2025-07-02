@@ -14,6 +14,11 @@ import me.mfletcher.homing.item.HomingCreativeTabs;
 import me.mfletcher.homing.item.HomingItems;
 import me.mfletcher.homing.network.HomingMessages;
 import me.mfletcher.homing.sounds.HomingSounds;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
 public final class HomingAttack {
@@ -43,5 +48,16 @@ public final class HomingAttack {
                 BoostAbility.handleBoost();
             });
         }
+    }
+
+    public static boolean shouldFluidCollision(Entity entity, FluidState fluidState) {
+        if (entity instanceof Player player) {
+            if (PlayerHomingData.isBoosting(player) && fluidState.is(FluidTags.WATER) && !player.isUsingItem() && !player.isCrouching() && !player.isInWater() && !player.isSwimming()) {
+                player.level().addParticle(ParticleTypes.SPLASH, player.getX(), player.getY(), player.getZ(), 0, 3, 0);
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 }
