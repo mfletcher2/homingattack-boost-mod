@@ -37,6 +37,11 @@ public class HomingConfig extends Config {
     @ValidatedFloat.Restrict(min = 0, max = 10)
     float toughnessHomingDamageMultiplier = 2.5f;
 
+    @ValidatedFloat.Restrict(min = 0, max = 2)
+    public float homingXZVelocity = 1f;
+    @ValidatedFloat.Restrict(min = 0, max = 2)
+    public float homingYVelocity = 1f;
+
     @ValidatedFloat.Restrict(min = 0, max = 5)
     float homingHitboxAdd = 1.75f;
     @ValidatedInt.Restrict(min = 0, max = 40)

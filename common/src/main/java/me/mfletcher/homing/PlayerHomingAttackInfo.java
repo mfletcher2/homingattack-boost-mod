@@ -39,7 +39,12 @@ public class PlayerHomingAttackInfo {
     public boolean tick() {
         if (player.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd).intersects(target.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd))) {
             target.hurt(player.level().damageSources().playerAttack(player), getDamage());
-            player.setDeltaMovement(velocity.multiply(-1, 0, -1).normalize().add(0, 0.5, 0));
+            Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
+            if (HomingAttack.config.homingXZVelocity > 0)
+                newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZVelocity, 0, HomingAttack.config.homingXZVelocity);
+            if (HomingAttack.config.homingYVelocity > 0)
+                newVelocity = newVelocity.add(0, HomingAttack.config.homingYVelocity / 2f, 0);
+            player.setDeltaMovement(newVelocity);
             player.hasImpulse = true;
             player.hurtMarked = true;
             sendHomingPacket(false);
