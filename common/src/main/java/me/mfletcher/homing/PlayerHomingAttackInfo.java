@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.util.Objects;
 
@@ -67,12 +68,12 @@ public class PlayerHomingAttackInfo {
     }
 
     private float getDamage() {
-        final float[] damage = {HomingAttack.config.baseHomingDamage};
+        MutableFloat damage = new MutableFloat(HomingAttack.config.baseHomingDamage);
         player.getArmorSlots().forEach(itemStack -> {
             if (itemStack.getItem() instanceof ArmorItem armorItem)
-                damage[0] += armorItem.getDefense() * HomingAttack.config.defenseHomingDamageMultiplier + armorItem.getToughness() * HomingAttack.config.toughnessHomingDamageMultiplier;
+                damage.add(armorItem.getDefense() * HomingAttack.config.defenseHomingDamageMultiplier + armorItem.getToughness() * HomingAttack.config.toughnessHomingDamageMultiplier);
         });
-        return damage[0];
+        return damage.getValue();
     }
 
     private void sendHomingPacket(boolean isHoming) {
