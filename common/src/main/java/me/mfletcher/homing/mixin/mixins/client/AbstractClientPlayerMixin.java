@@ -52,12 +52,14 @@ public abstract class AbstractClientPlayerMixin extends Player implements IAbstr
 
     @Unique
     public void homing$startHomingAnimation() {
-        HomingAnimation.playAnimation(homing$animationContainer, HomingAnimation.SPINDASH_ANIMATION);
+        if (HomingAttack.configClient.showHomingAnimation)
+            HomingAnimation.playAnimation(homing$animationContainer, HomingAnimation.SPINDASH_ANIMATION);
     }
 
     @Unique
     public void homing$startBoostAnimation() {
-        HomingAnimation.playAnimation(homing$animationContainer, HomingAnimation.BOOST_ANIMATION);
+        if (HomingAttack.configClient.showBoostAnimation)
+            HomingAnimation.playAnimation(homing$animationContainer, HomingAnimation.BOOST_ANIMATION);
     }
 
     @Unique

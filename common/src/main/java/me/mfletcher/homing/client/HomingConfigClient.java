@@ -16,6 +16,10 @@ public class HomingConfigClient extends Config {
         super(new ResourceLocation(HomingAttack.MOD_ID, "config_client"));
     }
 
+    public boolean showHomingAnimation = true;
+    public boolean showBoostAnimation = true;
+    public boolean showDashRingAnimation = true;
+
     @ValidatedInt.Restrict(min = 0, max = 100)
     public int reticleVolume = 100;
 

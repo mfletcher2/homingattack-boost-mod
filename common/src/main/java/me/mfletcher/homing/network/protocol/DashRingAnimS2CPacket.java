@@ -1,6 +1,7 @@
 package me.mfletcher.homing.network.protocol;
 
 import dev.architectury.networking.NetworkManager;
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.client.animation.HomingAnimation;
 import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,7 @@ public class DashRingAnimS2CPacket {
             assert Minecraft.getInstance().player != null;
             Player player = (Player) Minecraft.getInstance().player.level().getEntity(this.playerId);
 
-            if (player instanceof AbstractClientPlayer) {
+            if (player instanceof AbstractClientPlayer && HomingAttack.configClient.showDashRingAnimation) {
                 HomingAnimation.playAnimation(((IAbstractClientPlayerMixin) player).homing$getAnimationLayer(), HomingAnimation.DASH_RING_ANIMATION);
             }
         });
