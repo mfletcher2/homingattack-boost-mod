@@ -38,7 +38,8 @@ public class PlayerHomingAttackInfo {
     }
 
     public boolean tick() {
-        if (player.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd).intersects(target.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd))) {
+        if ((player.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd).intersects(target.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd)))
+                || (prevDist < (prevDist = player.distanceTo(target)) && player.distanceTo(target) <= HomingAttack.config.homingSpeed / 2f)) {
             target.hurt(player.level().damageSources().playerAttack(player), getDamage());
             Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
             if (HomingAttack.config.homingXZVelocity > 0)
@@ -52,9 +53,6 @@ public class PlayerHomingAttackInfo {
             return false;
         } else if (Objects.requireNonNull(player.getServer()).getTickCount() - startTime >= HomingAttack.config.homingTicksTimeout ||
                 (HomingAttack.config.stopHomingOnCollision && player.level().getBlockCollisions(player, player.getBoundingBox()).iterator().hasNext())) {
-            sendHomingPacket(false);
-            return false;
-        } else if (prevDist < (prevDist = player.distanceTo(target))) {
             sendHomingPacket(false);
             return false;
         }
