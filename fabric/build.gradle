@@ -37,7 +37,6 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
     include modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${rootProject.player_animator_version}")
-    modApi "com.terraformersmc:modmenu:$rootProject.modmenu_version"
     modImplementation include("be.florens:expandability-fabric:${rootProject.expandability_version}")
     modImplementation "me.fzzyhmstrs:fzzy_config:${rootProject.fzzy_version}"
 }
