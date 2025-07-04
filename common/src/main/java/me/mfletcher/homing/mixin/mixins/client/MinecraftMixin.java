@@ -51,10 +51,12 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     }
 
 
-//    @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
-//    public void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-//        if (entity.equals(getHighlightedEntity())) cir.setReturnValue(true);
-//    }
+    @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
+    public void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+        if (HomingAttack.configClient.reticleType.get() == HomingConfigClient.ReticleType.GLOWING
+                && entity.equals(homing$getHighlightedEntity()))
+            cir.setReturnValue(true);
+    }
 
     @Unique
     private LivingEntity homing$highlightedEntity;

@@ -34,7 +34,12 @@
   "homing.config_client.showBoostAnimation": "Enable Boost animation",
   "homing.config_client.showDashRingAnimation": "Enable Dash Ring animation",
   "homing.config_client.reticleVolume": "Reticle beep volume",
+  "homing.config_client.reticleType": "Reticle type",
   "homing.config_client.homingParticle": "Homing Attack trail particles",
+
+  "homing.reticle_type.GENERATIONS": "Generations",
+  "homing.reticle_type.GLOWING": "Glowing",
+  "homing.reticle_type.NONE": "None",
 
   "item.homing.chaos_emeralds": "Chaos Emeralds",
   "block.homing.dash_panel": "Dash Panel",
