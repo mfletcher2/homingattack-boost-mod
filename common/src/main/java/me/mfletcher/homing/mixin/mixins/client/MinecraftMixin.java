@@ -5,6 +5,7 @@ import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.mixin.access.IMinecraftMixin;
 import me.mfletcher.homing.sounds.HomingSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -12,6 +13,7 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.thread.ReentrantBlockableEventLoop;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -29,6 +31,10 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     @Shadow
     @Nullable
     public LocalPlayer player;
+
+    @Shadow
+    @Nullable
+    public ClientLevel level;
 
     public MinecraftMixin(String string) {
         super(string);
@@ -51,7 +57,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
 //    }
 
     @Unique
-    private Entity homing$highlightedEntity;
+    private LivingEntity homing$highlightedEntity;
 
     @Unique
     private boolean homing$homingReady;
@@ -62,7 +68,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
         if (!player.isSpectator() && !player.isPassenger()) {
             if (!player.onGround()) {
                 if (homing$homingReady) {
-                    Entity entityLooking = homing$getEntityLooking();
+                    LivingEntity entityLooking = homing$getEntityLooking();
                     if (entityLooking != null && !entityLooking.equals(homing$getHighlightedEntity()) && HomingAttack.configClient.reticleVolume > 0) {
                         getSoundManager().play(new SimpleSoundInstance(HomingSounds.RETICLE.get(), SoundSource.PLAYERS, HomingAttack.configClient.reticleVolume / 100f, 1, SoundInstance.createUnseededRandom(), player.blockPosition()));
                     }
@@ -78,10 +84,12 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     }
 
     @Unique
-    private Entity homing$getEntityLooking() {
+    private LivingEntity homing$getEntityLooking() {
+        if (player == null || level == null) return null;
         // This function is "heavily inspired" by GameRenderer#updateTargetedEntity
         float homingRange = HomingAttack.config.homingRange;
 
+        if (HomingAttack.config.homingAngleRange == 0) {
         Entity camera = getCameraEntity();
         Vec3 vec32 = camera.getViewVector(1.0f);
         Vec3 vec3 = camera.getEyePosition(1.0f);
@@ -89,12 +97,11 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
         AABB box = camera.getBoundingBox().expandTowards(vec32.scale(homingRange)).inflate(1.0, 1.0, 1.0);
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, vec3, vec33, box,
                 entity -> !entity.isSpectator() && entity.isPickable(), homingRange * homingRange);
-        if (entityHitResult != null && entityHitResult.getEntity().isAlive()) {
-            assert player != null;
-            if (player.hasLineOfSight(entityHitResult.getEntity())) {
-                return entityHitResult.getEntity();
-            }
+        if (entityHitResult != null && entityHitResult.getEntity() instanceof LivingEntity livingEntity
+                && livingEntity.isAlive() && player.hasLineOfSight(livingEntity)) {
+            return livingEntity;
         }
+    }
         return null;
     }
 
@@ -104,7 +111,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     }
 
     @Unique
-    public void homing$setHighlightedEntity(Entity highlightedEntity) {
+    public void homing$setHighlightedEntity(LivingEntity highlightedEntity) {
         this.homing$highlightedEntity = highlightedEntity;
     }
 
