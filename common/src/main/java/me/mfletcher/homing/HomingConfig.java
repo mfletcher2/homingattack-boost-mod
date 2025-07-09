@@ -27,6 +27,9 @@ public class HomingConfig extends Config {
     @ValidatedInt.Restrict(min = 1, max = 255)
     int homingTicksTimeout = 40;
 
+    @ValidatedFloat.Restrict(min = 0, max = 90)
+    public float homingAngleRange = 30;
+
     @ValidatedInt.Restrict(min = 0, max = 255)
     public int boostLevel = 50;
 

@@ -9,6 +9,7 @@
   "homing.config.homingRange": "Homing attack range",
   "homing.config.homingSpeed": "Homing attack speed",
   "homing.config.homingTicksTimeout": "Homing Attack timeout (ticks)",
+  "homing.config.homingAngleRange": "Homing Attack angle range",
   "homing.config.boostLevel": "Boost level",
   "homing.config.baseHomingDamage": "Base Homing Attack damage",
   "homing.config.defenseHomingDamageMultiplier": "Armor defense Homing Attack damage multiplier",

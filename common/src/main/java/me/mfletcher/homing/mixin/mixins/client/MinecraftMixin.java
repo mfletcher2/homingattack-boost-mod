@@ -2,6 +2,7 @@ package me.mfletcher.homing.mixin.mixins.client;
 
 import com.mojang.blaze3d.platform.WindowEventHandler;
 import me.mfletcher.homing.HomingAttack;
+import me.mfletcher.homing.client.HomingConfigClient;
 import me.mfletcher.homing.mixin.access.IMinecraftMixin;
 import me.mfletcher.homing.sounds.HomingSounds;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnable> implements WindowEventHandler, IMinecraftMixin {
@@ -88,22 +90,39 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     @Unique
     private LivingEntity homing$getEntityLooking() {
         if (player == null || level == null) return null;
-        // This function is "heavily inspired" by GameRenderer#updateTargetedEntity
         float homingRange = HomingAttack.config.homingRange;
+        float homingAngleRange = HomingAttack.config.homingAngleRange;
 
-        if (HomingAttack.config.homingAngleRange == 0) {
-        Entity camera = getCameraEntity();
-        Vec3 vec32 = camera.getViewVector(1.0f);
-        Vec3 vec3 = camera.getEyePosition(1.0f);
-        Vec3 vec33 = vec3.add(vec32.x * homingRange, vec32.y * homingRange, vec32.z * homingRange);
-        AABB box = camera.getBoundingBox().expandTowards(vec32.scale(homingRange)).inflate(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, vec3, vec33, box,
-                entity -> !entity.isSpectator() && entity.isPickable(), homingRange * homingRange);
-        if (entityHitResult != null && entityHitResult.getEntity() instanceof LivingEntity livingEntity
-                && livingEntity.isAlive() && player.hasLineOfSight(livingEntity)) {
-            return livingEntity;
+        if (homingAngleRange == 0) {
+            // This part is "heavily inspired" by GameRenderer.pick()
+            Entity camera = getCameraEntity();
+            Vec3 vec32 = camera.getViewVector(1.0f);
+            Vec3 vec3 = camera.getEyePosition(1.0f);
+            Vec3 vec33 = vec3.add(vec32.x * homingRange, vec32.y * homingRange, vec32.z * homingRange);
+            AABB box = camera.getBoundingBox().expandTowards(vec32.scale(homingRange)).inflate(1.0, 1.0, 1.0);
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(camera, vec3, vec33, box,
+                    entity -> !entity.isSpectator() && entity.isPickable(), homingRange * homingRange);
+            if (entityHitResult != null && entityHitResult.getEntity() instanceof LivingEntity livingEntity
+                    && livingEntity.isAlive() && player.hasLineOfSight(livingEntity)) {
+                return livingEntity;
+            }
+        } else {
+            float playerAngle = getCameraEntity().getYRot();
+            LivingEntity closestEntity = null;
+            float closestDistance = -1;
+            for (Entity entity : level.getEntities(player, AABB.ofSize(player.position(), homingRange * 2, homingRange * 2, homingRange * 2),
+                    entity -> entity instanceof LivingEntity)) {
+                float distance = entity.distanceTo(player);
+                if (distance > homingRange) continue;
+                float angle = homing$vec2Angle(entity.position().subtract(player.position()));
+                if (homing$isAngleInRange(angle - 90, playerAngle - homingAngleRange, playerAngle + homingAngleRange)
+                        && (closestEntity == null || distance < closestDistance) && entity.isAlive() && player.hasLineOfSight(entity)) {
+                    closestEntity = (LivingEntity) entity;
+                    closestDistance = distance;
+                }
+            }
+            return closestEntity;
         }
-    }
         return null;
     }
 
@@ -133,4 +152,14 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
         return homing$homingReady;
     }
 
+    @Unique
+    private float homing$vec2Angle(Vec3 vec3) {
+        return (float) (Math.toDegrees(Math.atan2(vec3.z, vec3.x)) + 360) % 360;
+    }
+
+    @Unique
+    private boolean homing$isAngleInRange(float theta, float lower, float upper) {
+        // https://stackoverflow.com/questions/66799475/how-to-elegantly-find-if-an-angle-is-between-a-range
+        return (theta - lower) % 360 <= (upper - lower) % 360;
+    }
 }
