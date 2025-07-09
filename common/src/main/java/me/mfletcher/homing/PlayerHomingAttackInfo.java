@@ -42,10 +42,10 @@ public class PlayerHomingAttackInfo {
                 || (prevDist < (prevDist = player.distanceTo(target)) && player.distanceTo(target) <= HomingAttack.config.homingSpeed / 2f)) {
             target.hurt(player.level().damageSources().playerAttack(player), getDamage());
             Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
-            if (HomingAttack.config.homingXZVelocity > 0)
-                newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZVelocity, 0, HomingAttack.config.homingXZVelocity);
-            if (HomingAttack.config.homingYVelocity > 0)
-                newVelocity = newVelocity.add(0, HomingAttack.config.homingYVelocity / 2f, 0);
+            if (HomingAttack.config.homingXZKnockbackVelocity > 0)
+                newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZKnockbackVelocity, 0, HomingAttack.config.homingXZKnockbackVelocity);
+            if (HomingAttack.config.homingYKnockbackVelocity > 0)
+                newVelocity = newVelocity.add(0, HomingAttack.config.homingYKnockbackVelocity / 2f, 0);
             player.setDeltaMovement(newVelocity);
             player.hasImpulse = true;
             player.hurtMarked = true;
