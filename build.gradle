@@ -11,7 +11,7 @@ architectury {
 
 allprojects {
     group = rootProject.maven_group
-    version = rootProject.mod_version
+    if (version == DEFAULT_VERSION) version = rootProject.mod_version
 
     repositories {
         maven {
@@ -101,6 +101,6 @@ subprojects {
 
 forgix {
     group = "me.mfletcher.homing"
-    mergedJarName = "homing-${rootProject.mod_version}.jar"
+    mergedJarName = "homing-${version}.jar"
 }
 
