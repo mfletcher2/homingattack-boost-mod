@@ -1,14 +1,34 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
+        mavenCentral()
         maven { url "https://maven.fabricmc.net/" }
         maven { url "https://maven.architectury.dev/" }
         maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
+        maven { url "https://repo.essential.gg/repository/maven-public" }
+    }
+
+    plugins {
+        String egtVersion = "0.6.7" // should be whatever is displayed in above badge
+        id("gg.essential.multi-version.root") version egtVersion
+        id("gg.essential.multi-version.api-validation") version egtVersion
     }
 }
 
 rootProject.name = 'homing'
 
-include 'common'
-include 'fabric'
-include 'forge'
+//include 'common'
+//include 'fabric'
+//include 'forge'
+
+List.of(
+        "1.20.1-fabric",
+//        "1.21.1-fabric",
+//        "1.21.1-neoforge"
+).forEach { version ->
+    include(":$version")
+    project(":$version").setProjectDir(file("versions/$version"))
+    project(":$version").setBuildFileName("../../build.gradle")
+}
+
+rootProject.buildFileName = "root.gradle"

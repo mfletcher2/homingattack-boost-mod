@@ -1,0 +1,14 @@
+plugins {
+    id("gg.essential.multi-version.root")
+}
+
+version="1.7"
+
+preprocess {
+    var fabric12001 = createNode("1.20.1-fabric", 12001, "yarn")
+//    var fabric12101 = createNode("1.21.1-fabric", 12101, "mcp")
+//    var neoforge12101 = createNode("1.21.1-neoforge", 12101, "mcp")
+
+//    fabric12101.link(fabric12001, null)
+//    neoforge12101.link(fabric12101, null)
+}
