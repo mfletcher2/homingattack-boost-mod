@@ -11,7 +11,7 @@ on:
   push
 
 env:
-  COMMIT_ID: ${{ github.event.push.head_commit.id }}
+  COMMIT_ID: ${{ github.event.head_commit.id }}
 
 jobs:
   build:
