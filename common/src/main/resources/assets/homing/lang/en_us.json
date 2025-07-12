@@ -43,6 +43,7 @@
   "homing.config_client.showHomingAnimation": "Play Homing Attack animation",
   "homing.config_client.showBoostAnimation": "Play Boost animation",
   "homing.config_client.showDashRingAnimation": "Play Dash Ring animation",
+  "homing.config_client.homingOnJump": "Homing Attack on jump keybind",
   "homing.config_client.reticleVolume": "Reticle beep volume",
   "homing.config_client.reticleType": "Reticle type",
   "homing.config_client.homingParticle": "Homing Attack trail particles",

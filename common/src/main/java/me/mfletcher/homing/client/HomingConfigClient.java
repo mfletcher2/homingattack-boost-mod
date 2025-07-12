@@ -22,6 +22,7 @@ public class HomingConfigClient extends Config {
     public boolean showHomingAnimation = true;
     public boolean showBoostAnimation = true;
     public boolean showDashRingAnimation = true;
+    public boolean homingOnJump = true;
 
     @ValidatedInt.Restrict(min = 0, max = 100)
     public int reticleVolume = 100;

@@ -1,5 +1,6 @@
 package me.mfletcher.homing.client.ability;
 
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.client.KeyMappings;
 import me.mfletcher.homing.mixin.access.IMinecraftMixin;
 import me.mfletcher.homing.network.HomingMessages;
@@ -8,13 +9,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 
 public class HomingAbility {
+    private static boolean homingPressed = false;
+
     public static void handleHoming() {
-        if (KeyMappings.HOMING_KEY.consumeClick()) {
+        if ((HomingAttack.configClient.homingOnJump && Minecraft.getInstance().options.keyJump.isDown()) || KeyMappings.HOMING_KEY.isDown()) {
+            if (homingPressed) return;
+            homingPressed = true;
             Entity entity = ((IMinecraftMixin) Minecraft.getInstance()).homing$getHighlightedEntity();
             if (entity != null) {
                 HomingMessages.sendToServer(new AttackC2SPacket(((IMinecraftMixin) Minecraft.getInstance()).homing$getHighlightedEntity().getId()));
                 ((IMinecraftMixin) Minecraft.getInstance()).homing$setHomingUnready();
             }
-        }
+        } else
+            homingPressed = false;
     }
 }
