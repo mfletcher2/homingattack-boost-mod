@@ -1,15 +1,21 @@
 package me.mfletcher.homing;
 
 
+import me.mfletcher.homing.mixin.mixins.AccessorItem;
 import me.mfletcher.homing.network.HomingMessages;
 import me.mfletcher.homing.network.protocol.AttackS2CPacket;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class PlayerHomingAttackInfo {
@@ -40,15 +46,7 @@ public class PlayerHomingAttackInfo {
     public boolean tick() {
         if ((player.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd).intersects(target.getBoundingBox().inflate(HomingAttack.config.homingHitboxAdd)))
                 || (prevDist < (prevDist = player.distanceTo(target)) && player.distanceTo(target) <= HomingAttack.config.homingSpeed / 2f)) {
-            target.hurt(player.level().damageSources().playerAttack(player), getDamage());
-            Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
-            if (HomingAttack.config.homingXZKnockbackVelocity > 0)
-                newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZKnockbackVelocity, 0, HomingAttack.config.homingXZKnockbackVelocity);
-            if (HomingAttack.config.homingYKnockbackVelocity > 0)
-                newVelocity = newVelocity.add(0, HomingAttack.config.homingYKnockbackVelocity / 2f, 0);
-            player.setDeltaMovement(newVelocity);
-            player.hasImpulse = true;
-            player.hurtMarked = true;
+            attackTarget();
             sendHomingPacket(false);
             return false;
         } else if (Objects.requireNonNull(player.getServer()).getTickCount() - startTime >= HomingAttack.config.homingTicksTimeout ||
@@ -65,12 +63,32 @@ public class PlayerHomingAttackInfo {
         return true;
     }
 
+    private void attackTarget() {
+        target.hurt(player.level().damageSources().playerAttack(player), getDamage());
+        Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
+        if (HomingAttack.config.homingXZKnockbackVelocity > 0)
+            newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZKnockbackVelocity, 0, HomingAttack.config.homingXZKnockbackVelocity);
+        if (HomingAttack.config.homingYKnockbackVelocity > 0)
+            newVelocity = newVelocity.add(0, HomingAttack.config.homingYKnockbackVelocity / 2f, 0);
+        player.setDeltaMovement(newVelocity);
+        player.hasImpulse = true;
+        player.hurtMarked = true;
+    }
+
     private float getDamage() {
         MutableFloat damage = new MutableFloat(HomingAttack.config.baseHomingDamage);
         player.getArmorSlots().forEach(itemStack -> {
             if (itemStack.getItem() instanceof ArmorItem armorItem)
                 damage.add(armorItem.getDefense() * HomingAttack.config.defenseHomingDamageMultiplier + armorItem.getToughness() * HomingAttack.config.toughnessHomingDamageMultiplier);
         });
+
+        for (Map.Entry<Attribute, AttributeModifier> attributeEntry : player.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
+            AttributeModifier modifier = attributeEntry.getValue();
+            if(modifier.getId() == AccessorItem.getBaseAttackDamageUUID())
+                damage.add(modifier.getAmount() * HomingAttack.config.weaponHomingDamageMultiplier);
+        }
+
+        player.sendSystemMessage(Component.literal("hello, this time you did this much damage: " + damage.getValue().toString()));
         return damage.getValue();
     }
 

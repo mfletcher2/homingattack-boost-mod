@@ -14,6 +14,7 @@
   "homing.config.baseHomingDamage": "Base Homing Attack damage",
   "homing.config.defenseHomingDamageMultiplier": "Armor defense Homing Attack damage multiplier",
   "homing.config.toughnessHomingDamageMultiplier": "Armor defense Homing Attack damage multiplier",
+  "homing.config.weaponHomingDamageMultiplier": "Held weapon Homing Attack damage multiplier",
   "homing.config.homingXZKnockbackVelocity": "Homing Attack horizontal knockback",
   "homing.config.homingYKnockbackVelocity": "Homing Attack vertical knockback",
   "homing.config.homingHitboxAdd": "Add to Homing Attack hitboxes",

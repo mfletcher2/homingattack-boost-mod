@@ -11,6 +11,7 @@
     "client.MinecraftMixin"
   ],
   "mixins": [
+    "AccessorItem",
     "ServerPlayerMixin"
   ],
   "injectors": {

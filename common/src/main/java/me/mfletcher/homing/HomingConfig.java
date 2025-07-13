@@ -33,13 +33,15 @@ public class HomingConfig extends Config {
     @ValidatedFloat.Restrict(min = 0, max = 2)
     public float homingYKnockbackVelocity = 1f;
 
-    @ValidatedFloat.Restrict(min = 0, max = 10)
+    @ValidatedFloat.Restrict(min = 0, max = 5)
     float baseHomingDamage = 0.5f;
-    @ValidatedFloat.Restrict(min = 0, max = 10)
+    @ValidatedFloat.Restrict(min = 0, max = 5)
     float defenseHomingDamageMultiplier = 0.3f;
-    @ConfigGroup.Pop
-    @ValidatedFloat.Restrict(min = 0, max = 10)
+    @ValidatedFloat.Restrict(min = 0, max = 5)
     float toughnessHomingDamageMultiplier = 2.5f;
+    @ConfigGroup.Pop
+    @ValidatedFloat.Restrict(min = 0, max = 5)
+    float weaponHomingDamageMultiplier = 0.5f;
 
     public ConfigGroup homingAdvGroup = new ConfigGroup("homing_adv_group", true);
     public boolean stopHomingOnCollision = false;
