@@ -3,15 +3,16 @@ plugins {
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id "io.github.pacifistmc.forgix" version '1.2.9'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
 architectury {
-    minecraft = project.minecraft_version
+    minecraft = minecraft_version
 }
 
 allprojects {
-    group = rootProject.maven_group
-    if (version == DEFAULT_VERSION) version = rootProject.mod_version
+    group = maven_group
+    if (version == DEFAULT_VERSION) version = mod_version
 
     repositories {
         maven {
@@ -28,7 +29,7 @@ subprojects {
 
     base {
         // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
-        archivesName = "$rootProject.archives_name-$project.name"
+        archivesName = "$archives_name-$project.name"
     }
 
     repositories {
@@ -56,10 +57,10 @@ subprojects {
     }
 
     dependencies {
-        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        minecraft "net.minecraft:minecraft:$minecraft_version"
         mappings loom.layered() {
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-$rootProject.minecraft_version:$rootProject.parchment_version@zip")
+            parchment("org.parchmentmc.data:parchment-$minecraft_version:$parchment_version@zip")
         }
     }
 
@@ -77,24 +78,6 @@ subprojects {
         it.options.release = 17
     }
 
-    // Configure Maven publishing.
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = base.archivesName.get()
-                from components.java
-            }
-        }
-
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-        repositories {
-            // Add repositories to publish to here.
-            // Notice: This block does NOT have the same function as the block in the top level.
-            // The repositories here will be used for publishing your artifact, not for
-            // retrieving dependencies.
-        }
-    }
-
     build.finalizedBy(mergeJars)
     assemble.finalizedBy(mergeJars)
 }
@@ -104,3 +87,23 @@ forgix {
     mergedJarName = "homing-${version}.jar"
 }
 
+publishMods {
+    file = file("Merged/" + forgix.mergedJarName)
+    changelog = file("changelog.md").text
+    type = BETA
+    modLoaders.addAll("fabric", "forge")
+
+    curseforge {
+        projectId = "927281"
+        projectSlug = "homing-attack-and-boost"
+        accessToken = System.getenv("CURSEFORGE_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        requires("fzzy-config", "architectury-api")
+    }
+    modrinth {
+        projectId = "9DPewlmy"
+        accessToken = System.getenv("MODRINTH_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        requires("fzzy-config", "architectury-api")
+    }
+}
