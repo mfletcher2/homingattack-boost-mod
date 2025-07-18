@@ -4,7 +4,6 @@ package me.mfletcher.homing;
 import me.mfletcher.homing.mixin.mixins.AccessorItem;
 import me.mfletcher.homing.network.HomingMessages;
 import me.mfletcher.homing.network.protocol.AttackS2CPacket;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -84,11 +83,9 @@ public class PlayerHomingAttackInfo {
 
         for (Map.Entry<Attribute, AttributeModifier> attributeEntry : player.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).entries()) {
             AttributeModifier modifier = attributeEntry.getValue();
-            if(modifier.getId() == AccessorItem.getBaseAttackDamageUUID())
+            if (modifier.getId() == AccessorItem.getBaseAttackDamageUUID())
                 damage.add(modifier.getAmount() * HomingAttack.config.weaponHomingDamageMultiplier);
         }
-
-        player.sendSystemMessage(Component.literal("hello, this time you did this much damage: " + damage.getValue().toString()));
         return damage.getValue();
     }
 
