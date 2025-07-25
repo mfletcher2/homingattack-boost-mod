@@ -24,6 +24,8 @@ public class HomingConfigClient extends Config {
     public boolean showDashRingAnimation = true;
     public boolean homingOnJump = true;
 
+    public ValidatedEnum<BoostActivator> boostActivator = new ValidatedEnum<>(BoostActivator.HOLD, ValidatedEnum.WidgetType.CYCLING);
+
     @ValidatedInt.Restrict(min = 0, max = 100)
     public int reticleVolume = 100;
 
@@ -31,6 +33,15 @@ public class HomingConfigClient extends Config {
 
     public ValidatedField<ParticleType<?>> homingParticle = ValidatedRegistryType.of(ParticleTypes.ELECTRIC_SPARK, BuiltInRegistries.PARTICLE_TYPE,
             particleTypeHolder -> particleTypeHolder.value() instanceof SimpleParticleType);
+
+    public enum BoostActivator implements EnumTranslatable {
+        HOLD, TOGGLE;
+
+        @Override
+        public @NotNull String prefix() {
+            return HomingAttack.MOD_ID + ".boost_activator";
+        }
+    }
 
     public enum ReticleType implements EnumTranslatable {
         GENERATIONS, GLOWING, NONE;

@@ -2,6 +2,7 @@ package me.mfletcher.homing.client.ability;
 
 import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.PlayerHomingData;
+import me.mfletcher.homing.client.HomingConfigClient;
 import me.mfletcher.homing.client.KeyMappings;
 import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
 import me.mfletcher.homing.network.HomingMessages;
@@ -24,17 +25,20 @@ public class BoostAbility {
     }
 
     private static boolean shouldStartBoost(@NotNull LocalPlayer player) {
-        return KeyMappings.BOOST_KEY.isDown() && !PlayerHomingData.isBoosting(player)
+        return !PlayerHomingData.isBoosting(player)
+                && (((HomingAttack.configClient.boostActivator.get() == HomingConfigClient.BoostActivator.HOLD && KeyMappings.BOOST_KEY.isDown()) ||
+                (HomingAttack.configClient.boostActivator.get() == HomingConfigClient.BoostActivator.TOGGLE && KeyMappings.BOOST_KEY.consumeClick()))
                 && HomingAttack.config.enableBoost
                 && player.mainSupportingBlockPos.isPresent()
                 && (HomingAttack.config.boostHungerDrain <= 0 || player.getFoodData().getFoodLevel() > 6)
                 && (HomingAttack.config.boostXpDrain <= 0 || player.experienceProgress > 0 || player.experienceLevel > 0)
-                && !player.isUsingItem();
+                && !player.isUsingItem());
     }
 
     private static boolean shouldStopBoost(@NotNull LocalPlayer player) {
         return PlayerHomingData.isBoosting(player)
-                && (!KeyMappings.BOOST_KEY.isDown()
+                && (((HomingAttack.configClient.boostActivator.get() == HomingConfigClient.BoostActivator.HOLD && !KeyMappings.BOOST_KEY.isDown()) ||
+                (HomingAttack.configClient.boostActivator.get() == HomingConfigClient.BoostActivator.TOGGLE && KeyMappings.BOOST_KEY.consumeClick()))
                 || (HomingAttack.config.boostHungerDrain > 0 && player.getFoodData().getFoodLevel() <= 6)
                 || (HomingAttack.config.boostXpDrain > 0 && player.experienceProgress <= 0 && player.experienceLevel <= 0)
                 || player.isUsingItem());
