@@ -12,6 +12,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.thread.ReentrantBlockableEventLoop;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -107,7 +108,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
                 return livingEntity;
             }
         } else {
-            float playerAngle = getCameraEntity().getYRot();
+            float playerAngle = player.yHeadRot;
             LivingEntity closestEntity = null;
             float closestDistance = -1;
             for (Entity entity : level.getEntities(player, AABB.ofSize(player.position(), homingRange * 2, homingRange * 2, homingRange * 2),
@@ -115,7 +116,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
                 float distance = entity.distanceTo(player);
                 if (distance > homingRange) continue;
                 float angle = homing$vec2Angle(entity.position().subtract(player.position()));
-                if (homing$isAngleInRange(angle - 90, playerAngle - homingAngleRange, playerAngle + homingAngleRange)
+                if (Mth.degreesDifferenceAbs(angle - 90, playerAngle) < homingAngleRange
                         && (closestEntity == null || distance < closestDistance) && entity.isAlive() && player.hasLineOfSight(entity)) {
                     closestEntity = (LivingEntity) entity;
                     closestDistance = distance;
@@ -154,12 +155,6 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
 
     @Unique
     private float homing$vec2Angle(Vec3 vec3) {
-        return (float) (Math.toDegrees(Math.atan2(vec3.z, vec3.x)) + 360) % 360;
-    }
-
-    @Unique
-    private boolean homing$isAngleInRange(float theta, float lower, float upper) {
-        // https://stackoverflow.com/questions/66799475/how-to-elegantly-find-if-an-angle-is-between-a-range
-        return (theta - lower) % 360 <= (upper - lower) % 360;
+        return (float) Mth.wrapDegrees(Math.toDegrees(Math.atan2(vec3.z, vec3.x)));
     }
 }
