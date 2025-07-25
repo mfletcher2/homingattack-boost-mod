@@ -17,6 +17,7 @@
   "homing.config.weaponHomingDamageMultiplier": "Held weapon Homing Attack damage multiplier",
   "homing.config.homingXZKnockbackVelocity": "Homing Attack horizontal knockback",
   "homing.config.homingYKnockbackVelocity": "Homing Attack vertical knockback",
+  "homing.config.homingTargetKnockback": "Homing Attack target knockback multiplier",
   "homing.config.homingHitboxAdd": "Add to Homing Attack hitboxes",
   "homing.config.homingDamageWaitTicks": "Homing Attack damage cooldown (ticks)",
   "homing.config.boostHungerDrain": "Boost hunger drain",

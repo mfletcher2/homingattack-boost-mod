@@ -63,10 +63,17 @@ public class PlayerHomingAttackInfo {
     }
 
     private void attackTarget() {
+        Vec3 velocityNorm = velocity.normalize();
+
         target.hurt(player.level().damageSources().playerAttack(player), getDamage());
+        if (HomingAttack.config.homingTargetKnockback > 0) {
+            target.setDeltaMovement(velocityNorm.x * HomingAttack.config.homingTargetKnockback, HomingAttack.config.homingTargetKnockback / 5, velocityNorm.z * HomingAttack.config.homingTargetKnockback);
+            target.hasImpulse = true;
+        }
+
         Vec3 newVelocity = new Vec3(velocity.x, velocity.y, velocity.z);
         if (HomingAttack.config.homingXZKnockbackVelocity > 0)
-            newVelocity = newVelocity.multiply(-1, 0, -1).normalize().multiply(HomingAttack.config.homingXZKnockbackVelocity, 0, HomingAttack.config.homingXZKnockbackVelocity);
+            newVelocity = velocityNorm.multiply(-HomingAttack.config.homingXZKnockbackVelocity, 0, -HomingAttack.config.homingXZKnockbackVelocity);
         if (HomingAttack.config.homingYKnockbackVelocity > 0)
             newVelocity = newVelocity.add(0, HomingAttack.config.homingYKnockbackVelocity / 2f, 0);
         player.setDeltaMovement(newVelocity);

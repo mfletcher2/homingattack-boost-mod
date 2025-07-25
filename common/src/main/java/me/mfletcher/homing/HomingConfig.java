@@ -47,6 +47,9 @@ public class HomingConfig extends Config {
     public boolean stopHomingOnCollision = false;
 
     @ValidatedFloat.Restrict(min = 0, max = 5)
+    float homingTargetKnockback = 1f;
+
+    @ValidatedFloat.Restrict(min = 0, max = 5)
     float homingHitboxAdd = 1.75f;
 
     @ValidatedInt.Restrict(min = 0, max = 40)
