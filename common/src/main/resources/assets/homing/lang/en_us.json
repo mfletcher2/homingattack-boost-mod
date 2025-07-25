@@ -20,6 +20,7 @@
   "homing.config.homingTargetKnockback": "Homing Attack target knockback multiplier",
   "homing.config.homingHitboxAdd": "Add to Homing Attack hitboxes",
   "homing.config.homingDamageWaitTicks": "Homing Attack damage cooldown (ticks)",
+  "homing.config.boostOnWater": "Run on water with Boost",
   "homing.config.boostHungerDrain": "Boost hunger drain",
   "homing.config.boostXpDrain": "Boost XP drain",
   "homing.config.dashPanelPower": "Dash Panel power",

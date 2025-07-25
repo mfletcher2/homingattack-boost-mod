@@ -52,7 +52,7 @@ public final class HomingAttack {
 
     public static boolean shouldFluidCollision(Entity entity, FluidState fluidState) {
         if (entity instanceof Player player) {
-            if (PlayerHomingData.isBoosting(player) && fluidState.is(FluidTags.WATER) && !player.isUsingItem() && !player.isCrouching() && !player.isInWater() && !player.isSwimming()) {
+            if (config.boostOnWater && PlayerHomingData.isBoosting(player) && fluidState.is(FluidTags.WATER) && !player.isUsingItem() && !player.isCrouching() && !player.isInWater() && !player.isSwimming()) {
                 player.level().addParticle(ParticleTypes.SPLASH, player.getX(), player.getY(), player.getZ(), 0, 3, 0);
                 return true;
             }

@@ -63,6 +63,8 @@ public class HomingConfig extends Config {
     @ValidatedInt.Restrict(min = 0, max = 255)
     public int boostLevel = 50;
 
+    boolean boostOnWater = true;
+
     @ValidatedFloat.Restrict(min = 0, max = 1)
     public float boostHungerDrain = 0.05f;
     @ConfigGroup.Pop
