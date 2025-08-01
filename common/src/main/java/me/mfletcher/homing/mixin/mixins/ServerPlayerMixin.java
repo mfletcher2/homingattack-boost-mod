@@ -60,7 +60,7 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     private int homing$lastHomingTicks = -1;
 
     @Unique
-    private final MobEffectInstance homing$speedEffect = new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20,
+    private final MobEffectInstance homing$speedEffect = new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION,
             HomingAttack.config.boostLevel, false, false, false);
 
 
@@ -72,7 +72,6 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     public void travel(Vec3 movementInput) {
         if (homing$playerHomingAttackInfo == null) {
             if (PlayerHomingData.isBoosting(this)) {
-                addEffect(homing$speedEffect);
                 if (HomingAttack.config.boostHungerDrain > 0)
                     causeFoodExhaustion(HomingAttack.config.boostHungerDrain);
                 if (HomingAttack.config.boostXpDrain > 0)
@@ -117,6 +116,11 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
             }
     }
 
+    @Inject(method = "disconnect", at = @At("HEAD"))
+    public void onDisconnect(CallbackInfo ci) {
+        removeEffect(homing$speedEffect.getEffect());
+    }
+
     @Unique
     public Entity homing$getHomingEntity() {
         if (homing$playerHomingAttackInfo != null)
@@ -127,11 +131,13 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     @Unique
     public void homing$setBoosting(boolean boosting) {
         PlayerHomingData.setBoosting(this, boosting);
-        if (!boosting)
-            removeEffect(homing$speedEffect.getEffect());
-        else
+        if (boosting) {
+            addEffect(homing$speedEffect);
             level().playSound(null, blockPosition(), HomingSounds.BOOST.get(), SoundSource.PLAYERS, HomingAttack.config.boostVolume / 100f, 1.0F);
+        } else
+            removeEffect(homing$speedEffect.getEffect());
+
         for (Player p : level().players())
-            HomingMessages.sendToPlayer(new BoostS2CPacket(getId(), PlayerHomingData.isBoosting(this)), (ServerPlayer) p);
+            HomingMessages.sendToPlayer(new BoostS2CPacket(getId(), boosting), (ServerPlayer) p);
     }
 }
