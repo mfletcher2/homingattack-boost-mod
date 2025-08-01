@@ -10,6 +10,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -28,6 +29,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnable> implements WindowEventHandler, IMinecraftMixin {
@@ -54,12 +57,21 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     }
 
 
+    @Shadow
+    @Nullable
+    public IntegratedServer getSingleplayerServer() {
+        return null;
+    }
+
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
     public void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (HomingAttack.configClient.reticleType.get() == HomingConfigClient.ReticleType.GLOWING
                 && entity.equals(homing$getHighlightedEntity()))
             cir.setReturnValue(true);
     }
+
+    @Unique
+    private int homing$homingReadyTick = 0;
 
     @Unique
     private LivingEntity homing$highlightedEntity;
@@ -72,7 +84,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
         if (player == null || !HomingAttack.config.enableHoming) return;
         if (!player.isSpectator() && !player.isPassenger()) {
             if (!player.onGround()) {
-                if (homing$homingReady) {
+                if (homing$isHomingReady()) {
                     LivingEntity entityLooking = homing$getEntityLooking();
                     if (entityLooking != null && !entityLooking.equals(homing$getHighlightedEntity()) && HomingAttack.configClient.reticleVolume > 0) {
                         getSoundManager().play(new SimpleSoundInstance(HomingSounds.RETICLE.get(), SoundSource.PLAYERS, HomingAttack.configClient.reticleVolume / 100f, 1, SoundInstance.createUnseededRandom(), player.blockPosition()));
@@ -150,11 +162,20 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
 
     @Unique
     public boolean homing$isHomingReady() {
-        return homing$homingReady;
+        if (!homing$homingReady) return false;
+        assert level != null;
+        return Objects.requireNonNull(getSingleplayerServer()).getTickCount() >= homing$homingReadyTick;
     }
 
     @Unique
+    public void homing$setHomingReadyTick() {
+        assert level != null;
+        homing$homingReadyTick = Objects.requireNonNull(getSingleplayerServer()).getTickCount() + HomingAttack.config.homingCooldown;
+    }
+
+
+    @Unique
     private float homing$vec2Angle(Vec3 vec3) {
-        return (float) Mth.wrapDegrees(Math.toDegrees(Math.atan2(vec3.z, vec3.x)));
+        return (float) Math.toDegrees(Math.atan2(vec3.z, vec3.x));
     }
 }

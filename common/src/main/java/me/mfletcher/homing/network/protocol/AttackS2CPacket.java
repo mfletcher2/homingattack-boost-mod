@@ -36,8 +36,10 @@ public class AttackS2CPacket {
             Player homingPlayer = (Player) Minecraft.getInstance().level.getEntity(this.homingPlayerId);
 
             if (homingPlayer == null || Minecraft.getInstance().player == null) return;
-            if (Minecraft.getInstance().player.equals(homingPlayer) && !isHoming)
+            if (Minecraft.getInstance().player.equals(homingPlayer) && !isHoming) {
                 ((IMinecraftMixin) Minecraft.getInstance()).homing$setHomingReady();
+                ((IMinecraftMixin) Minecraft.getInstance()).homing$setHomingReadyTick();
+            }
 
             PlayerHomingData.setHoming(homingPlayer, isHoming);
 

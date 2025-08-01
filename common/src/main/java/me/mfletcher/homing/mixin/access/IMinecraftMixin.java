@@ -11,4 +11,5 @@ public interface IMinecraftMixin {
 
     boolean homing$isHomingReady();
 
+    void homing$setHomingReadyTick();
 }
