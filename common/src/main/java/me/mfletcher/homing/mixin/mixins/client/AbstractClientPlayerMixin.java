@@ -11,12 +11,9 @@ import me.mfletcher.homing.mixin.access.IAbstractClientPlayerMixin;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,10 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixin extends Player implements IAbstractClientPlayerMixin {
-    @Shadow
-    @Final
-    public ClientLevel clientLevel;
-
     @Unique
     private final ModifierLayer<IAnimation> homing$animationContainer = new ModifierLayer<>();
 
@@ -41,13 +34,6 @@ public abstract class AbstractClientPlayerMixin extends Player implements IAbstr
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void init(ClientLevel level, GameProfile profile, CallbackInfo ci) {
         PlayerAnimationAccess.getPlayerAnimLayer((AbstractClientPlayer) (Object) this).addAnimLayer(1000, homing$animationContainer); //Register the layer with a priority
-    }
-
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        if (PlayerHomingData.isHoming(this))
-            clientLevel.addParticle((SimpleParticleType) HomingAttack.configClient.homingParticle.get(), getX(), getY(), getZ(), 0, 0, 0);
     }
 
     @Unique

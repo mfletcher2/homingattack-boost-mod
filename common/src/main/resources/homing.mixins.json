@@ -12,6 +12,7 @@
   ],
   "mixins": [
     "AccessorItem",
+    "PlayerMixin",
     "ServerPlayerMixin"
   ],
   "injectors": {

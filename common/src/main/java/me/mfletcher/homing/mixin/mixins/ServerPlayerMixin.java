@@ -68,19 +68,6 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
         super(level, pos, yaw, gameProfile);
     }
 
-    @Override
-    public void travel(Vec3 movementInput) {
-        if (homing$playerHomingAttackInfo == null) {
-            if (PlayerHomingData.isBoosting(this)) {
-                if (HomingAttack.config.boostHungerDrain > 0)
-                    causeFoodExhaustion(HomingAttack.config.boostHungerDrain);
-                if (HomingAttack.config.boostXpDrain > 0)
-                    giveExperiencePoints(-HomingAttack.config.boostXpDrain);
-                super.travel(new Vec3(0, 0, 1));
-            } else super.travel(movementInput);
-        }
-    }
-
     @Inject(method = "setPlayerInput", at = @At("HEAD"), cancellable = true)
     public void onUpdateInput(CallbackInfo ci) {
         if (homing$playerHomingAttackInfo != null)
@@ -119,6 +106,19 @@ public abstract class ServerPlayerMixin extends Player implements IServerPlayerM
     @Inject(method = "disconnect", at = @At("HEAD"))
     public void onDisconnect(CallbackInfo ci) {
         removeEffect(homing$speedEffect.getEffect());
+    }
+
+    @Unique
+    public boolean homing$onTravel(Vec3 movementInput) {
+        if (homing$playerHomingAttackInfo == null) {
+            if (PlayerHomingData.isBoosting(this)) {
+                if (HomingAttack.config.boostHungerDrain > 0)
+                    causeFoodExhaustion(HomingAttack.config.boostHungerDrain);
+                if (HomingAttack.config.boostXpDrain > 0)
+                    giveExperiencePoints(-HomingAttack.config.boostXpDrain);
+            }
+            return false;
+        } else return true; // true means Player#travel should be cancelled
     }
 
     @Unique
