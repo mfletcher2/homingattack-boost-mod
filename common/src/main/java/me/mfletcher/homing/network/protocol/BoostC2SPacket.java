@@ -1,6 +1,7 @@
 package me.mfletcher.homing.network.protocol;
 
 import dev.architectury.networking.NetworkManager;
+import me.mfletcher.homing.HomingAttack;
 import me.mfletcher.homing.mixin.access.IServerPlayerMixin;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -25,6 +26,8 @@ public class BoostC2SPacket {
         NetworkManager.PacketContext context = supplier.get();
         context.queue(() -> {
             // Running on server
+            if(!HomingAttack.config.enableBoost) return;
+
             ((IServerPlayerMixin) context.getPlayer()).homing$setBoosting(isBoosting);
         });
     }
