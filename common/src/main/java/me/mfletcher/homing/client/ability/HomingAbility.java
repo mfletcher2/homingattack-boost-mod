@@ -12,7 +12,9 @@ public class HomingAbility {
     private static boolean homingPressed = false;
 
     public static void handleHoming() {
-        if ((HomingAttack.configClient.homingOnJump && Minecraft.getInstance().options.keyJump.isDown()) || KeyMappings.HOMING_KEY.isDown()) {
+        if (Minecraft.getInstance().player == null) return;
+        if ((HomingAttack.configClient.homingOnJump && Minecraft.getInstance().options.keyJump.isDown() && !Minecraft.getInstance().player.isCreative())
+                || KeyMappings.HOMING_KEY.isDown()) {
             if (homingPressed) return;
             homingPressed = true;
             Entity entity = ((IMinecraftMixin) Minecraft.getInstance()).homing$getHighlightedEntity();
