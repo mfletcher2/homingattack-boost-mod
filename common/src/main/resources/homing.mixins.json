@@ -8,7 +8,8 @@
     "client.AccessorRenderType",
     "client.EntityRenderDispatcherMixin",
     "client.KeyboardInputMixin",
-    "client.MinecraftMixin"
+    "client.MinecraftMixin",
+    "client.PlayerMixinClient"
   ],
   "mixins": [
     "AccessorItem",
