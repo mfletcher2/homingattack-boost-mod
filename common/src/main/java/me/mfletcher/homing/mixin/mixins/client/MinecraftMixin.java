@@ -10,7 +10,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -29,8 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnable> implements WindowEventHandler, IMinecraftMixin {
@@ -56,13 +53,6 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
         return null;
     }
 
-
-    @Shadow
-    @Nullable
-    public IntegratedServer getSingleplayerServer() {
-        return null;
-    }
-
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
     public void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (HomingAttack.configClient.reticleType.get() == HomingConfigClient.ReticleType.GLOWING
@@ -71,7 +61,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     }
 
     @Unique
-    private int homing$homingReadyTick = 0;
+    private long homing$homingReadyTime = 0;
 
     @Unique
     private LivingEntity homing$highlightedEntity;
@@ -164,13 +154,13 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     public boolean homing$isHomingReady() {
         if (!homing$homingReady) return false;
         assert level != null;
-        return Objects.requireNonNull(getSingleplayerServer()).getTickCount() >= homing$homingReadyTick;
+        return System.currentTimeMillis() >= homing$homingReadyTime;
     }
 
     @Unique
     public void homing$setHomingReadyTick() {
         assert level != null;
-        homing$homingReadyTick = Objects.requireNonNull(getSingleplayerServer()).getTickCount() + HomingAttack.config.homingCooldown;
+        homing$homingReadyTime = System.currentTimeMillis() + (int) (HomingAttack.config.homingCooldown * 1000);
     }
 
 
