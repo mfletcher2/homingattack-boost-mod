@@ -6,5 +6,12 @@
 - Add options to disable animations and change reticle types
 - Improve config screen layout
 - Fix reticle beep when looking at non-living entities
+- Add option to toggle boost (instead of holding the key)
+- Add knockback to homing attack target
+- Add option to disable boost on water
+- Add cooldown for homing attack (1 second by default)
+- Change boost effect duration to infinite (compatibility with ExtraSounds)
+- Check whether homing & boost are enabled on server side
+- Use injections in mixins, not overrides (for mod compatibility)
 
-**Full Changelog**: https://github.com/mfletcher2/homingattack-boost-mod/compare/1.20.1-1.6a...1.20.1-1.7-beta.1
+**Full Changelog**: https://github.com/mfletcher2/homingattack-boost-mod/compare/1.20.1-1.6a...1.20.1-1.7

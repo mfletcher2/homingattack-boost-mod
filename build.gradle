@@ -90,7 +90,7 @@ forgix {
 publishMods {
     file = file("Merged/" + forgix.mergedJarName)
     changelog = file("changelog.md").text
-    type = BETA
+    type = STABLE
     modLoaders.addAll("fabric", "forge")
 
     curseforge {
