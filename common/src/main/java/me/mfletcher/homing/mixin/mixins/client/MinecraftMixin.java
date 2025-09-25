@@ -11,6 +11,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.thread.ReentrantBlockableEventLoop;
@@ -154,7 +155,7 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     public boolean homing$isHomingReady() {
         if (!homing$homingReady) return false;
         assert level != null;
-        return System.currentTimeMillis() >= homing$homingReadyTime;
+        return System.currentTimeMillis() >= homing$homingReadyTime && homing$isRequiredHomingHeight();
     }
 
     @Unique
@@ -167,5 +168,18 @@ public abstract class MinecraftMixin extends ReentrantBlockableEventLoop<Runnabl
     @Unique
     private float homing$vec2Angle(Vec3 vec3) {
         return (float) Math.toDegrees(Math.atan2(vec3.z, vec3.x));
+    }
+
+    @Unique
+    private boolean homing$isRequiredHomingHeight() {
+        if (HomingAttack.config.homingMinHeight == 0) return true;
+
+        assert level != null;
+        assert player != null;
+        int blockBelow = player.getBlockY() - 1;
+        while (level.getBlockState(new BlockPos(player.getBlockX(), blockBelow, player.getBlockZ())).isAir() && blockBelow > level.getMinBuildHeight()) {
+            blockBelow--;
+        }
+        return player.position().y - blockBelow - 1 >= HomingAttack.config.homingMinHeight;
     }
 }

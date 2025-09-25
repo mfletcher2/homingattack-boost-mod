@@ -31,6 +31,9 @@ public class HomingConfig extends Config {
     @ValidatedFloat.Restrict(min = 0, max = 5)
     public float homingCooldown = 1;
 
+    @ValidatedFloat.Restrict(min = 0)
+    public float homingMinHeight = 0;
+
     @ValidatedFloat.Restrict(min = 0, max = 2)
     public float homingXZKnockbackVelocity = 1f;
     @ValidatedFloat.Restrict(min = 0, max = 2)
